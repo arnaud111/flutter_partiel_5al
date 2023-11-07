@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 
 import 'home.dart';
 
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Miku',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -26,7 +28,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF21262B),
       ),
       themeMode: ThemeMode.dark,
-      home: const MyHomePage(),
+      home: BlocProvider(
+        create: (context) => AuthBloc(),
+        child: const MaterialApp(
+          home: MyHomePage(),
+        ),
+      ),
     );
   }
 }

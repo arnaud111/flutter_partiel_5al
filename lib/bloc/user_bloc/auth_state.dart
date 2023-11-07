@@ -1,18 +1,18 @@
 part of 'auth_bloc.dart';
 
 class AuthState {
-  Auth? user;
+  Auth? auth;
   StateStatus status;
 
   AuthState({
-    this.user,
+    this.auth,
     this.status = StateStatus.initial,
   });
 
   AuthState copyWith({
     StateStatus? status,
-    Auth? user,
+    Auth? auth,
   }) {
-    return AuthState(status: status ?? this.status, user: user ?? this.user);
+    return AuthState(status: status ?? this.status, auth: auth ?? this.auth);
   }
 }
