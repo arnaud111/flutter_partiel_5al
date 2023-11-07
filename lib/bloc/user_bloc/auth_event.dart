@@ -5,6 +5,8 @@ abstract class AuthEvent {}
 
 class Me extends AuthEvent {}
 
+class Disconnect extends AuthEvent {}
+
 class Login extends AuthEvent {
   final String email;
   final String password;
@@ -19,12 +21,10 @@ class Signup extends AuthEvent {
   final String email;
   final String name;
   final String password;
-  final String validatePassword;
 
   Signup({
     required this.email,
     required this.name,
     required this.password,
-    required this.validatePassword,
   });
 }

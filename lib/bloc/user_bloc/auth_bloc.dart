@@ -13,6 +13,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthState()) {
     on<Me>(_onMe);
+    on<Disconnect>(_onDisconnect);
     on<Login>(_onLogin);
     on<Signup>(_onSignup);
   }
@@ -34,6 +35,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: StateStatus.error,
       ));
     }
+  }
+
+  void _onDisconnect(Disconnect event, Emitter<AuthState> emit) async {
+    emit(state.copyWith(
+      status: StateStatus.initial,
+      auth: null,
+    ));
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("auth_token");
   }
 
   void _onLogin(Login event, Emitter<AuthState> emit) async {
