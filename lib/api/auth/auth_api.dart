@@ -1,4 +1,5 @@
 import 'package:flutter_partiel_5al/api/api.dart';
+import 'package:flutter_partiel_5al/api/http_error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/auth.dart';
@@ -9,6 +10,9 @@ class AuthApi extends Api {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
     final response = await Api.dio.get("/auth/me");
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return Auth.fromJson(response.data);
   }
 
@@ -17,6 +21,9 @@ class AuthApi extends Api {
       "email": email,
       "password": password,
     });
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return response.data["authToken"];
   }
 
@@ -26,6 +33,9 @@ class AuthApi extends Api {
       "email": email,
       "password": password,
     });
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return response.data["authToken"];
   }
 }

@@ -6,7 +6,7 @@ class AuthState {
 
   AuthState({
     this.auth,
-    this.status = StateStatus.initial,
+    required this.status,
   });
 
   AuthState copyWith({

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/widget/auth/login_alert.dart';
 import 'package:flutter_partiel_5al/widget/auth/signup_alert.dart';
 
