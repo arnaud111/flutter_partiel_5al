@@ -39,13 +39,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: StateStatus.success(),
         auth: auth,
       ));
-    } on HttpError catch(e) {
+    } on HttpError catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error(e.message),
+        status: StateStatus.error(
+          message: e.message,
+        ),
       ));
-    } catch(e) {
+    } catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error("Error, please retry later !"),
+        status: StateStatus.error(
+          message: "Error, please retry later !",
+        ),
       ));
     }
   }
@@ -76,13 +80,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: StateStatus.success(),
         auth: auth,
       ));
-    } on HttpError catch(e) {
+    } on HttpError catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error(e.message),
+        status: StateStatus.error(
+          message: e.message,
+          payload: e.payload,
+        ),
       ));
-    } catch(e) {
+    } catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error("Error, please retry later !"),
+        status: StateStatus.error(
+          message: "Error, please retry later !",
+        ),
       ));
     }
   }
@@ -93,7 +102,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
 
     try {
-      String token = await AuthApi.signup(event.name, event.email, event.password);
+      String token =
+          await AuthApi.signup(event.name, event.email, event.password);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("auth_token", token);
 
@@ -103,13 +113,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: StateStatus.success(),
         auth: auth,
       ));
-    } on HttpError catch(e) {
+    } on HttpError catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error(e.message),
+        status: StateStatus.error(
+          message: e.message,
+          payload: e.payload,
+        ),
       ));
-    } catch(e) {
+    } catch (e) {
       emit(state.copyWith(
-        status: StateStatus.error("Error, please retry later !"),
+        status: StateStatus.error(
+          message: "Error, please retry later !",
+        ),
       ));
     }
   }

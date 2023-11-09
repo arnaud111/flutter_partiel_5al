@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 
 import '../../bloc/state_status.dart';
+import '../form/text_from_field_sexy.dart';
 
 class SignupAlert extends StatefulWidget {
   const SignupAlert({super.key});
@@ -37,20 +38,6 @@ class _SignupAlertState extends State<SignupAlert> {
     }
   }
 
-  String? textEmptyValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please, fill this input';
-    }
-    return null;
-  }
-
-  String? passwordValidator(String? value) {
-    if (value == null || value.length < 8) {
-      return 'Password must contain at least 8 characters';
-    }
-    return null;
-  }
-
   String? passwordConfirmValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please, fill this input';
@@ -66,10 +53,10 @@ class _SignupAlertState extends State<SignupAlert> {
     return AlertDialog(
         content: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state.status == StateStatus.success) {
+            if (state.status.status == StateStatusEnum.success) {
               Navigator.pop(context);
             }
-            if (state.status == StateStatus.loading) {
+            if (state.status.status == StateStatusEnum.loading) {
               return const SizedBox(
                 width: 75,
                 height: 75,
@@ -84,38 +71,20 @@ class _SignupAlertState extends State<SignupAlert> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
+                  TextFormFieldSexy(
+                    label: 'Email',
                     controller: emailController,
-                    validator: textEmptyValidator,
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
+                    error: state.status.payload?["param"] == "email",
                   ),
-                  TextFormField(
+                  TextFormFieldSexy(
+                    label: 'Name',
                     controller: nameController,
-                    validator: textEmptyValidator,
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      labelText: 'Name',
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
+                    error: state.status.payload?["param"] == "name",
                   ),
-                  TextFormField(
+                  TextFormFieldSexy(
+                    label: 'Password',
                     controller: passwordController,
-                    validator: passwordValidator,
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
+                    error: state.status.payload?["param"] == "password",
                     obscureText: true,
                   ),
                   TextFormField(

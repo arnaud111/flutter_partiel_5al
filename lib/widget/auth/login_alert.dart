@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/widget/form/text_from_field_sexy.dart';
 
 import '../../bloc/user_bloc/auth_bloc.dart';
 
@@ -25,20 +26,11 @@ class _LoginAlertState extends State<LoginAlert> {
   }
 
   void login() {
-    if (_formKey.currentState!.validate()) {
-      final authBloc = BlocProvider.of<AuthBloc>(context);
-      authBloc.add(Login(
-        email: emailController.text,
-        password: passwordController.text,
-      ));
-    }
-  }
-
-  String? textEmptyValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please, fill this input';
-    }
-    return null;
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.add(Login(
+      email: emailController.text,
+      password: passwordController.text,
+    ));
   }
 
   @override
@@ -64,28 +56,15 @@ class _LoginAlertState extends State<LoginAlert> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextFormField(
-                  validator: textEmptyValidator,
+                TextFormFieldSexy(
+                  label: 'Email',
                   controller: emailController,
-                  decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
+                  error: state.status.payload?["param"] == "email",
                 ),
-                TextFormField(
-                  validator: textEmptyValidator,
+                TextFormFieldSexy(
+                  label: 'Password',
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  obscureText: true,
+                  error: state.status.payload?["param"] == "password",
                 ),
                 Padding(
                   padding: const EdgeInsets.only(

@@ -8,11 +8,9 @@ enum StateStatusEnum {
 class StateStatus {
   StateStatusEnum status;
   String? message;
+  Map<String, dynamic>? payload;
 
-  StateStatus({
-    required this.status,
-    this.message,
-  });
+  StateStatus({required this.status, this.message, this.payload});
 
   static StateStatus initial() {
     return StateStatus(
@@ -32,10 +30,14 @@ class StateStatus {
     );
   }
 
-  static StateStatus error(String? message) {
+  static StateStatus error({
+    String? message,
+    Map<String, dynamic>? payload,
+  }) {
     return StateStatus(
       status: StateStatusEnum.error,
       message: message,
+      payload: payload,
     );
   }
 }
