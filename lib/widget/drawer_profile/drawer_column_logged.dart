@@ -30,7 +30,7 @@ class DrawerColumnLogged extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.account_circle,
-                  size: 96,
+                  size: 80,
                 ),
                 const SizedBox(
                   height: 8,

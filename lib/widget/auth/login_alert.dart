@@ -36,64 +36,67 @@ class _LoginAlertState extends State<LoginAlert> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state.status.status == StateStatusEnum.success) {
-            Navigator.pop(context);
-          }
-          if (state.status.status == StateStatusEnum.loading) {
-            return const SizedBox(
-              width: 75,
-              height: 75,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          return Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormFieldSexy(
-                  label: 'Email',
-                  controller: emailController,
-                  error: state.status.payload?["param"] == "email",
+      content: SingleChildScrollView(
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state.status.status == StateStatusEnum.success) {
+              Navigator.pop(context);
+            }
+            if (state.status.status == StateStatusEnum.loading) {
+              return const SizedBox(
+                width: 75,
+                height: 75,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-                TextFormFieldSexy(
-                  label: 'Password',
-                  controller: passwordController,
-                  error: state.status.payload?["param"] == "password",
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
+              );
+            }
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormFieldSexy(
+                    label: 'Email',
+                    controller: emailController,
+                    error: state.status.payload?["param"] == "email",
                   ),
-                  child: Text(
-                    state.status.message ?? "",
-                    style: const TextStyle(color: Colors.red),
+                  TextFormFieldSexy(
+                    label: 'Password',
+                    controller: passwordController,
+                    error: state.status.payload?["param"] == "password",
+                    obscureText: true,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF626af7),
-                      ),
-                      child: const Text("Login"),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                    ),
+                    child: Text(
+                      state.status.message ?? "",
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: login,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF626af7),
+                        ),
+                        child: const Text("Login"),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

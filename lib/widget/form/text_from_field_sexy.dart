@@ -29,8 +29,8 @@ class TextFormFieldSexy extends StatelessWidget {
           ),
         ),
         labelText: label,
-        labelStyle: TextStyle(
-          color: getColor(),
+        labelStyle: const TextStyle(
+          color: Colors.white,
         ),
       ),
       obscureText: obscureText,

@@ -14,15 +14,23 @@ class DrawerProfile extends StatelessWidget {
     return Drawer(
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if (state.status == StateStatus.success) {
+          if (state.status.status == StateStatusEnum.success) {
             return DrawerColumnLogged(
               authState: state,
             );
           }
-          if (state.status == StateStatus.loading) {
-            return DrawerColumnDisconnected();
+          if (state.status.status == StateStatusEnum.loading) {
+            return const Center(
+              child: SizedBox(
+                width: 75,
+                height: 75,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
           }
-          return DrawerColumnDisconnected();
+          return const DrawerColumnDisconnected();
         },
       ),
     );
