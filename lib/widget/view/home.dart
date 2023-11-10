@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/widget/drawer_profile/drawer_profile.dart';
@@ -39,7 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CreatePost(),
+                    builder: (context) => BlocProvider(
+                      create: (BuildContext context) => PostManagementBloc(),
+                      child: const CreatePost(),
+                    ),
                   ),
                 );
               }

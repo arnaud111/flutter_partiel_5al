@@ -34,12 +34,13 @@ class PostApi extends Api {
     return PostList.fromJson(response.data);
   }
 
-  static Future<void> post(String? content, String? image) async {
+  static Future<Post> post(String? content, String? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
-    await Api.dio.post("/post", data: {
+    final response = await Api.dio.post("/post", data: {
       "content": content,
       "base_64_image": image,
     });
+    return Post.fromJson(response.data);
   }
 }

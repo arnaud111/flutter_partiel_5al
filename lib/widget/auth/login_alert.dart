@@ -15,8 +15,8 @@ class LoginAlert extends StatefulWidget {
 class _LoginAlertState extends State<LoginAlert> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -74,7 +74,9 @@ class _LoginAlertState extends State<LoginAlert> {
                     ),
                     child: Text(
                       state.status.message ?? "",
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                   Padding(
