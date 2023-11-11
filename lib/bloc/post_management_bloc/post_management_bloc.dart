@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_partiel_5al/api/post/post_api.dart';
@@ -29,11 +29,7 @@ class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> 
     ));
 
     try {
-      print(event.textMessage);
-      print(event.base64Image);
-      print("before");
-      await PostApi.post(event.textMessage, event.base64Image);
-      print("after");
+      await PostApi.post(event.content, event.image);
 
       emit(PostManagementState(
         status: StateStatus.success(),

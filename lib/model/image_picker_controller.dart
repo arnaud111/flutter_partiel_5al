@@ -1,5 +1,5 @@
+import 'dart:io';
+
 class ImagePickerController {
-
-  String base64Image = "";
-
+  File? image;
 }

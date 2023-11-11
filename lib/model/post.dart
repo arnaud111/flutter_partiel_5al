@@ -5,10 +5,10 @@ import 'image.dart';
 
 class Post {
   int? id;
-  String? createdAt;
+  int? createdAt;
   String? content;
   Image? image;
-  User? user;
+  User? author;
   List<Comment>? comments;
   int? commentsCount;
 
@@ -17,7 +17,7 @@ class Post {
     this.createdAt,
     this.content,
     this.image,
-    this.user,
+    this.author,
     this.comments,
     this.commentsCount,
   });
@@ -28,7 +28,7 @@ class Post {
       createdAt: json['created_at'],
       content: json['content'],
       image: Image.fromJson(json['image']),
-      user: User.fromJson(json['user']),
+      author: User.fromJson(json['author']),
       comments: json.containsKey('comments') ? (json['comments'] as List<dynamic>).map((comment) => Comment.fromJson(comment)).toList() : null,
       commentsCount: json.containsKey("comments_count") ? json['comments_count'] : null,
     );

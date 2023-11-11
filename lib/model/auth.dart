@@ -1,6 +1,6 @@
 class Auth {
   int? id;
-  String? createdAt;
+  int? createdAt;
   String? name;
   String? email;
 
@@ -14,7 +14,7 @@ class Auth {
   static Auth fromJson(Map<String, dynamic> json) {
     return Auth(
       id: json['id'],
-      createdAt: json['createdAt'],
+      createdAt: json['created_at'],
       name: json['name'],
       email: json['email'],
     );

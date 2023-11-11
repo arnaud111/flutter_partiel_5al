@@ -1,28 +1,43 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_partiel_5al/api/api.dart';
 import 'package:flutter_partiel_5al/model/post.dart';
 import 'package:flutter_partiel_5al/model/post_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PostApi extends Api {
+import '../http_error.dart';
 
+class PostApi extends Api {
   static Future<void> delete(int postId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
-    await Api.dio.delete("/post/$postId");
+    Api.dio.options.headers["Authorization"] =
+        "Bearer ${prefs.getString('auth_token')}";
+    final response = await Api.dio.delete("/post/$postId");
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
   }
 
   static Future<Post> getById(int postId) async {
     final response = await Api.dio.get("/post/$postId");
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return Post.fromJson(response.data);
   }
 
   static Future<Post> patch(int postId, String? content, String? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
+    Api.dio.options.headers["Authorization"] =
+        "Bearer ${prefs.getString('auth_token')}";
     final response = await Api.dio.patch("/post/$postId", data: {
       "content": content,
       "base_64_image": image,
     });
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return Post.fromJson(response.data);
   }
 
@@ -31,16 +46,26 @@ class PostApi extends Api {
       "page": page,
       "per_page": perPage,
     });
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return PostList.fromJson(response.data);
   }
 
-  static Future<Post> post(String? content, String? image) async {
+  static Future<Post> post(String content, File? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
-    final response = await Api.dio.post("/post", data: {
-      "content": content,
-      "base_64_image": image,
-    });
+    Api.dio.options.headers["Authorization"] =
+        "Bearer ${prefs.getString('auth_token')}";
+    final response = await Api.dio.post("/post",
+        data: FormData.fromMap({
+          "content": content,
+          "base_64_image": image != null ? await MultipartFile.fromFile(
+            image.path,
+          ) : null,
+        }));
+    if (response.statusCode != 200) {
+      throw HttpError.fromJson(response.data);
+    }
     return Post.fromJson(response.data);
   }
 }

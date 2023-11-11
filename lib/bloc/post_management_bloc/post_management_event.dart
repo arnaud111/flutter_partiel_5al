@@ -7,11 +7,11 @@ class Init extends PostManagementEvent {}
 
 class CreatePostEvent extends PostManagementEvent {
 
-  final String textMessage;
-  final String? base64Image;
+  final String content;
+  final File? image;
 
   CreatePostEvent({
-    required this.textMessage,
-    this.base64Image,
+    required this.content,
+    this.image,
   });
 }

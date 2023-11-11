@@ -2,7 +2,7 @@ import 'package:flutter_partiel_5al/model/user.dart';
 
 class Comment {
   int? id;
-  String? createdAt;
+  int? createdAt;
   String? content;
   User? user;
 

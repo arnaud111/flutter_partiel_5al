@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
@@ -24,9 +22,8 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
-      List<int> imageBytes = await File(image.path).readAsBytes();
       setState(() {
-        widget.imagePickerController.base64Image = base64Encode(Uint8List.fromList(imageBytes));
+        widget.imagePickerController.image = File(image.path);
       });
     } catch (e) {
       print('Failed to pick image: $e');
@@ -35,13 +32,13 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
 
   void resetImage() {
     setState(() {
-      widget.imagePickerController.base64Image = "";
+      widget.imagePickerController.image = null;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.imagePickerController.base64Image.isEmpty) {
+    if (widget.imagePickerController.image == null) {
       return GestureDetector(
         onTap: pickImage,
         child: const Row(
@@ -69,9 +66,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
       child: Stack(
         children: [
           Center(
-            child: Image.memory(
-              base64Decode(widget.imagePickerController.base64Image),
-            ),
+            child: Image.file(widget.imagePickerController.image!),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

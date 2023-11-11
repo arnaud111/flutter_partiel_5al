@@ -19,8 +19,8 @@ class _CreatePostState extends State<CreatePost> {
   void sendForm() {
     final postManagementBloc = BlocProvider.of<PostManagementBloc>(context);
     postManagementBloc.add(CreatePostEvent(
-      textMessage: textController.text,
-      base64Image: imagePickerController.base64Image,
+      content: textController.text,
+      image: imagePickerController.image,
     ));
   }
 

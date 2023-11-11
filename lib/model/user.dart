@@ -1,6 +1,6 @@
 class User {
   int? id;
-  String? createdAt;
+  int? createdAt;
   String? name;
 
   User({
