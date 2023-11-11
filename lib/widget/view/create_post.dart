@@ -14,7 +14,6 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-
   final ImagePickerController imagePickerController = ImagePickerController();
   final TextEditingController textController = TextEditingController();
 
@@ -24,15 +23,23 @@ class _CreatePostState extends State<CreatePost> {
       content: textController.text,
       image: imagePickerController.image,
     ));
-    showLoadingAlert(context);
+    showLoadingAlert(context, postManagementBloc);
   }
 
-  void showLoadingAlert(BuildContext context) {
+  void showLoadingAlert(BuildContext context, PostManagementBloc postManagementBloc) {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) => const SendingPostAlert(),
+      builder: (BuildContext context) =>
+          BlocProvider(
+            create: (BuildContext context) => postManagementBloc,
+            child: const SendingPostAlert(),
+          ),
       barrierDismissible: false,
-    );
+    ).then((value) {
+      if (postManagementBloc.state.status.status == StateStatusEnum.success) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   @override
@@ -41,45 +48,42 @@ class _CreatePostState extends State<CreatePost> {
       appBar: AppBar(
         title: const Text("Create Post"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 16,
-          left: 16,
-          right: 16,
-        ),
-        child: Wrap(
-          runSpacing: 16,
-          children: [
-            TextField(
-              controller: textController,
-              maxLines: 8, //or null
-              decoration: const InputDecoration(
-                hintText: "Enter your message",
-                fillColor: Colors.black12,
-                filled: true,
-                border: InputBorder.none,
-              ),
+      body: BlocBuilder<PostManagementBloc, PostManagementState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
             ),
-            BlocBuilder<PostManagementBloc, PostManagementState>(
-              builder: (context, state) {
-                if (state.status.status == StateStatusEnum.error) {
-                  return Center(
-                    child: Text(
-                      state.status.message ?? "",
-                      style: const TextStyle(
-                        color: Colors.red,
-                      ),
+            child: Wrap(
+              runSpacing: 16,
+              children: [
+                TextField(
+                  controller: textController,
+                  maxLines: 8, //or null
+                  decoration: const InputDecoration(
+                    hintText: "Enter your message",
+                    fillColor: Colors.black12,
+                    filled: true,
+                    border: InputBorder.none,
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    state.status.message ?? "",
+                    style: const TextStyle(
+                      color: Colors.red,
                     ),
-                  );
-                }
-                return Container();
-              },
+                  ),
+                ),
+                ImagePickerField(
+                  imagePickerController: imagePickerController,
+                ),
+              ],
             ),
-            ImagePickerField(
-              imagePickerController: imagePickerController,
-            ),
-          ],
-        ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => sendForm(context),
