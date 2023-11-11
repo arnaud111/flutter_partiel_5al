@@ -5,18 +5,13 @@ import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:flutter_partiel_5al/widget/form/image_picker_field.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+class CreatePost extends StatelessWidget {
+  CreatePost({super.key});
 
-  @override
-  State<CreatePost> createState() => _CreatePostState();
-}
-
-class _CreatePostState extends State<CreatePost> {
   final ImagePickerController imagePickerController = ImagePickerController();
   final TextEditingController textController = TextEditingController();
 
-  void sendForm() {
+  void sendForm(BuildContext context) {
     final postManagementBloc = BlocProvider.of<PostManagementBloc>(context);
     postManagementBloc.add(CreatePostEvent(
       content: textController.text,
@@ -33,7 +28,9 @@ class _CreatePostState extends State<CreatePost> {
       body: BlocBuilder<PostManagementBloc, PostManagementState>(
         builder: (context, state) {
           if (state.status.status == StateStatusEnum.success) {
-            Navigator.pop(context);
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pop();
+            });
             return Container();
           }
           return Stack(
@@ -92,7 +89,7 @@ class _CreatePostState extends State<CreatePost> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: sendForm,
+        onPressed: () => sendForm(context),
         backgroundColor: const Color(0xFF626af7),
         child: const Icon(
           Icons.send,

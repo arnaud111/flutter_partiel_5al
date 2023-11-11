@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(
                     builder: (BuildContext context) => BlocProvider(
                       create: (BuildContext context) => PostManagementBloc(),
-                      child: const CreatePost(),
+                      child: CreatePost(),
                     ),
                   ),
                 );
