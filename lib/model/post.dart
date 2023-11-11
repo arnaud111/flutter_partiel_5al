@@ -27,7 +27,7 @@ class Post {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      image: Image.fromJson(json['image']),
+      image: json['image'] != null ? Image.fromJson(json['image']) : null,
       author: User.fromJson(json['author']),
       comments: json.containsKey('comments') ? (json['comments'] as List<dynamic>).map((comment) => Comment.fromJson(comment)).toList() : null,
       commentsCount: json.containsKey("comments_count") ? json['comments_count'] : null,

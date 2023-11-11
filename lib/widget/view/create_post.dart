@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
+import 'package:flutter_partiel_5al/widget/alert/sending_post_alert.dart';
 import 'package:flutter_partiel_5al/widget/form/image_picker_field.dart';
 
 class CreatePost extends StatefulWidget {
@@ -13,15 +14,25 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
+
   final ImagePickerController imagePickerController = ImagePickerController();
   final TextEditingController textController = TextEditingController();
 
-  void sendForm() {
+  void sendForm(BuildContext context) {
     final postManagementBloc = BlocProvider.of<PostManagementBloc>(context);
     postManagementBloc.add(CreatePostEvent(
       content: textController.text,
       image: imagePickerController.image,
     ));
+    showLoadingAlert(context);
+  }
+
+  void showLoadingAlert(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const SendingPostAlert(),
+      barrierDismissible: false,
+    );
   }
 
   @override
@@ -71,7 +82,7 @@ class _CreatePostState extends State<CreatePost> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: sendForm,
+        onPressed: () => sendForm(context),
         backgroundColor: const Color(0xFF626af7),
         child: const Icon(
           Icons.send,
