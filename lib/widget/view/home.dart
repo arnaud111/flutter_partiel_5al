@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/widget/drawer_profile/drawer_profile.dart';
+import 'package:flutter_partiel_5al/widget/post/list_post.dart';
 
 import 'create_post.dart';
 
@@ -29,7 +31,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('Home Page'),
       ),
       drawer: const DrawerProfile(),
-      body: const Placeholder(),
+      body: BlocProvider(
+        create: (BuildContext context) => PostListBloc(),
+        child: const ListPost(),
+      ),
       floatingActionButton: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           return FloatingActionButton(
