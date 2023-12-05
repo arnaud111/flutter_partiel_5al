@@ -10,6 +10,6 @@ class GetListPost extends PostListUserEvent {
   final int userId;
 
   GetListPost({
-    required this.userId
+    required this.userId,
   });
 }

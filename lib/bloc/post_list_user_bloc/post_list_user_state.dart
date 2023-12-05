@@ -2,8 +2,8 @@ part of 'post_list_user_bloc.dart';
 
 class PostListUserState {
 
-  PostList? postList;
   StateStatus status;
+  PostList? postList;
 
   PostListUserState({
     required this.status,

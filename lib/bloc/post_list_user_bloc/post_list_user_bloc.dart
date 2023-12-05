@@ -40,7 +40,6 @@ class PostListUserBloc extends Bloc<PostListUserEvent, PostListUserState> {
         ),
       ));
     } catch (e) {
-      print(e.toString());
       emit(state.copyWith(
         status: StateStatus.error(
           message: "Error, please retry later !",

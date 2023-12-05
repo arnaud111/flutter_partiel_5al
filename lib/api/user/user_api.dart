@@ -14,7 +14,6 @@ class UserApi extends Api {
     if (response.statusCode != 200) {
       throw HttpError.fromJson(response.data);
     }
-    print(response.data);
     return PostList.fromJson(response.data);
   }
 
