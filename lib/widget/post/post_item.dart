@@ -9,9 +9,11 @@ class PostItem extends StatelessWidget {
   const PostItem({
     super.key,
     required this.post,
+    this.clickable = true,
   });
 
   final Post post;
+  final bool clickable;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,9 @@ class PostItem extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
+                    if (clickable == false) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(

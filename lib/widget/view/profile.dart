@@ -66,6 +66,7 @@ class _ProfileState extends State<Profile> {
                           padding: const EdgeInsets.all(8.0),
                           child: PostItem(
                             post: state.postList!.items![index].withAuthor(widget.user),
+                            clickable: false,
                           ),
                         );
                       },
