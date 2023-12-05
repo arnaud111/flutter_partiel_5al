@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
+import '../../model/user.dart';
+import '../view/profile.dart';
 
 class DrawerColumnLogged extends StatelessWidget {
   const DrawerColumnLogged({
@@ -40,8 +43,27 @@ class DrawerColumnLogged extends StatelessWidget {
             ),
           ),
         ),
-        const ListTile(
-          title: Text("My Post"),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => BlocProvider(
+                  create: (BuildContext context) => PostListUserBloc(),
+                  child: Profile(
+                    user: User(
+                      id: authState.auth!.id,
+                      name: authState.auth!.name,
+                      createdAt: authState.auth!.createdAt,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          child: const ListTile(
+            title: Text("My Post"),
+          ),
         ),
         Expanded(
           child: Container(),

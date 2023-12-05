@@ -42,8 +42,9 @@ class _ListPostState extends State<ListPost> {
           child: ListView.builder(
             itemCount: state.postList?.itemsTotal,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: PostItem(
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PostItem(
                   post: state.postList!.items![index],
                 ),
               );

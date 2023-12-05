@@ -30,7 +30,7 @@ class PostList {
       offSet: json['offSet'],
       itemsTotal: json['itemsTotal'],
       pageTotal: json['pageTotal'],
-      items: (json['items'] as List<dynamic>).map((comment) => Post.fromJson(comment)).toList(),
+      items: json['items'] == null ? null : (json['items'] as List<dynamic>).map((comment) => Post.fromJson(comment)).toList(),
     );
   }
 }

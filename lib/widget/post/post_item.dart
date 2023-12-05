@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/post_list_user_bloc/post_list_user_bloc.dart';
+import 'package:flutter_partiel_5al/widget/view/profile.dart';
 
 import '../../model/post.dart';
 
 class PostItem extends StatelessWidget {
-  PostItem({
+  const PostItem({
     super.key,
     required this.post,
   });
@@ -28,7 +31,15 @@ class PostItem extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => BlocProvider(
+                          create: (BuildContext context) => PostListUserBloc(),
+                          child: Profile(user: post.author!),
+                        ),
+                      ),
+                    );
                   },
                   child: Text(
                     post.author?.name ?? "",
@@ -74,7 +85,7 @@ class PostItem extends StatelessWidget {
                     width: 8,
                   ),
                   Text(
-                    getPostCount(),
+                    "${post.commentsCount}",
                   ),
                 ],
               ),
@@ -83,13 +94,6 @@ class PostItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getPostCount() {
-    if (post.comments == null) {
-      return "0";
-    }
-    return "${post.comments!.length}";
   }
 
   String getDate() {
