@@ -11,13 +11,13 @@ import 'package:flutter_partiel_5al/datasource/repository/auth_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/post_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/user_repository.dart';
 import 'package:flutter_partiel_5al/model/user.dart';
-import 'package:flutter_partiel_5al/widget/screen/create_post_screen.dart';
-import 'package:flutter_partiel_5al/widget/screen/post_detail_screen.dart';
-import 'package:flutter_partiel_5al/widget/screen/profile_screen.dart';
+import 'package:flutter_partiel_5al/front/screen/create_post_screen.dart';
+import 'package:flutter_partiel_5al/front/screen/post_detail_screen.dart';
+import 'package:flutter_partiel_5al/front/screen/profile_screen.dart';
 
 import 'bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import 'datasource/repository/comment_repository.dart';
-import 'widget/screen/home_screen.dart';
+import 'front/screen/home_screen.dart';
 
 void main() {
   runApp(const MyApp());

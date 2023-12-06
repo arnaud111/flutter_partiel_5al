@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
-import 'package:flutter_partiel_5al/widget/post/comment_item.dart';
-import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
+import 'package:flutter_partiel_5al/front/post/comment_item.dart';
+import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
+import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
 import '../../bloc/user_bloc/auth_bloc.dart';
 import '../../model/post.dart';
 
 class PostDetailScreen extends StatefulWidget {
-
   static const String routeName = "/postDetails";
 
   static void navigateTo(BuildContext context, int postId) {
@@ -28,7 +28,6 @@ class PostDetailScreen extends StatefulWidget {
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -49,32 +48,24 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: BlocBuilder<PostDetailBloc, PostDetailState>(
-                builder: (context, state) {
-              switch (state.status.status) {
+                builder: (context, statePost) {
+              switch (statePost.status.status) {
                 case StateStatusEnum.initial:
                   return Container();
                 case StateStatusEnum.loading:
-                  return const Center(
-                    child: SizedBox(
-                      width: 75,
-                      height: 75,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  );
+                  return const Loading();
                 case StateStatusEnum.success:
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RowInfoAuthor(
-                        createdAt: state.post!.createdAt!,
-                        author: state.post!.author!,
+                        createdAt: statePost.post!.createdAt!,
+                        author: statePost.post!.author!,
                       ),
                       Text(
-                        state.post!.content!,
+                        statePost.post!.content!,
                       ),
-                      if (state.post!.image != null)
+                      if (statePost.post!.image != null)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Center(
@@ -82,10 +73,42 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               constraints: const BoxConstraints(
                                 maxHeight: 300,
                               ),
-                              child: Image.network(state.post!.image!.url!),
+                              child: Image.network(statePost.post!.image!.url!),
                             ),
                           ),
                         ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, stateAuth) {
+                          if (stateAuth.status.status ==
+                                  StateStatusEnum.success &&
+                              stateAuth.auth!.id ==
+                                  statePost.post!.author!.id) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
                       const Divider(
                         indent: 16,
                         endIndent: 16,
@@ -93,14 +116,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: state.post!.comments!.length,
+                          itemCount: statePost.post!.comments!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 8,
                               ),
                               child: CommentItem(
-                                  comment: state.post!.comments![index]),
+                                  comment: statePost.post!.comments![index]),
                             );
                           },
                         ),
@@ -109,7 +132,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   );
                 case StateStatusEnum.error:
                   return Center(
-                    child: Text(state.status.message!),
+                    child: Text(statePost.status.message!),
                   );
               }
             }),

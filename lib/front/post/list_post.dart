@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
-import 'package:flutter_partiel_5al/widget/post/post_item.dart';
+import 'package:flutter_partiel_5al/front/post/post_item.dart';
+import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
 class ListPost extends StatefulWidget {
   const ListPost({super.key});
@@ -27,15 +28,7 @@ class _ListPostState extends State<ListPost> {
           case StateStatusEnum.initial:
             return Container();
           case StateStatusEnum.loading:
-            return const Center(
-              child: SizedBox(
-                width: 75,
-                height: 75,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            );
+            return const Loading();
           case StateStatusEnum.success:
             return RefreshIndicator(
               onRefresh: () async {

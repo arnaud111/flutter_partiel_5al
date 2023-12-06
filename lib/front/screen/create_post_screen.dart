@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/front/widget/loading.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
-import 'package:flutter_partiel_5al/widget/form/image_picker_field.dart';
+import 'package:flutter_partiel_5al/front/form/image_picker_field.dart';
 
 class CreatePostScreen extends StatelessWidget {
 
@@ -82,13 +83,7 @@ class CreatePostScreen extends StatelessWidget {
                 child: SizedBox(
                   width: 300,
                   height: 200,
-                  child: SizedBox(
-                    width: 75,
-                    height: 75,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
+                  child: Loading(),
                 ),
               ) : Container(),
             ],

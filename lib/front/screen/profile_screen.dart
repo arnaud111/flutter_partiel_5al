@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
 import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import '../../model/user.dart';
@@ -85,15 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   }
-                  return const Center(
-                    child: SizedBox(
-                      width: 75,
-                      height: 75,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  );
+                  return const Loading();
                 },
               ),
             ),

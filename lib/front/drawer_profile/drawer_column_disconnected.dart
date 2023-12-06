@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_partiel_5al/widget/alert/login_alert.dart';
-import 'package:flutter_partiel_5al/widget/alert/signup_alert.dart';
+import 'package:flutter_partiel_5al/front/alert/login_alert.dart';
+import 'package:flutter_partiel_5al/front/alert/signup_alert.dart';
 
 class DrawerColumnDisconnected extends StatelessWidget {
   const DrawerColumnDisconnected({super.key});

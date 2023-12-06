@@ -4,8 +4,8 @@ import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/datasource/repository/post_repository.dart';
-import 'package:flutter_partiel_5al/widget/drawer_profile/drawer_profile.dart';
-import 'package:flutter_partiel_5al/widget/post/list_post.dart';
+import 'package:flutter_partiel_5al/front/drawer_profile/drawer_profile.dart';
+import 'package:flutter_partiel_5al/front/post/list_post.dart';
 
 import 'create_post_screen.dart';
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
-import 'package:flutter_partiel_5al/widget/form/text_from_field_sexy.dart';
+import 'package:flutter_partiel_5al/front/form/text_from_field_sexy.dart';
+import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
 import '../../bloc/user_bloc/auth_bloc.dart';
 
@@ -43,13 +44,7 @@ class _LoginAlertState extends State<LoginAlert> {
               Navigator.pop(context);
             }
             if (state.status.status == StateStatusEnum.loading) {
-              return const SizedBox(
-                width: 75,
-                height: 75,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
+              return const Loading();
             }
             return Form(
               key: _formKey,

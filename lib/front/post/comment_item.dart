@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
+import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 
 import '../../model/comment.dart';
 
