@@ -23,34 +23,63 @@ class _ListPostState extends State<ListPost> {
   Widget build(BuildContext context) {
     return BlocBuilder<PostListBloc, PostListState>(
       builder: (context, state) {
-        if (state.status.status == StateStatusEnum.loading) {
-          return const Center(
-            child: SizedBox(
-              width: 75,
-              height: 75,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            final postListBloc = BlocProvider.of<PostListBloc>(context);
-            postListBloc.add(GetListPost());
-          },
-          child: ListView.builder(
-            itemCount: state.postList?.itemsTotal,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: PostItem(
-                  post: state.postList!.items![index],
+        switch (state.status.status) {
+          case StateStatusEnum.initial:
+            return Container();
+          case StateStatusEnum.loading:
+            return const Center(
+              child: SizedBox(
+                width: 75,
+                height: 75,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              );
-            },
-          ),
-        );
+              ),
+            );
+          case StateStatusEnum.success:
+            return RefreshIndicator(
+              onRefresh: () async {
+                final postListBloc = BlocProvider.of<PostListBloc>(context);
+                postListBloc.add(GetListPost());
+              },
+              child: ListView.builder(
+                itemCount: state.postList?.itemsTotal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PostItem(
+                      post: state.postList!.items![index],
+                    ),
+                  );
+                },
+              ),
+            );
+          case StateStatusEnum.error:
+            return RefreshIndicator(
+              onRefresh: () async {
+                final postListBloc = BlocProvider.of<PostListBloc>(context);
+                postListBloc.add(GetListPost());
+              },
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 300,
+                  ),
+                  const Icon(
+                    Icons.error,
+                    size: 64,
+                    color: Colors.redAccent,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Center(
+                    child: Text(state.status.message ?? ""),
+                  ),
+                ],
+              ),
+            );
+        }
       },
     );
   }

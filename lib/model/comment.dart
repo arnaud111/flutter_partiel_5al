@@ -4,13 +4,13 @@ class Comment {
   int? id;
   int? createdAt;
   String? content;
-  User? user;
+  User? author;
 
   Comment({
     this.id,
     this.createdAt,
     this.content,
-    this.user,
+    this.author,
   });
 
   static Comment fromJson(Map<String, dynamic> json) {
@@ -18,7 +18,7 @@ class Comment {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      user: User.fromJson(json['user']),
+      author: User.fromJson(json['author']),
     );
   }
 }

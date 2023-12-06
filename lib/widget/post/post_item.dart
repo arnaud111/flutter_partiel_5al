@@ -87,7 +87,14 @@ class PostItem extends StatelessWidget {
                     vertical: 16
                   ),
                   child: Center(
-                    child: Image.network(post.image!.url!),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxHeight: 300,
+                      ),
+                      child: Image.network(
+                        post.image!.url!,
+                      ),
+                    ),
                   ),
                 ),
               Row(

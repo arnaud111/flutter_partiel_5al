@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/widget/post/comment_item.dart';
 import 'package:flutter_partiel_5al/widget/view/profile.dart';
 
 import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
@@ -56,57 +57,76 @@ class _PostDetailState extends State<PostDetail> {
                     ),
                   );
                 case StateStatusEnum.success:
-                  return SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        BlocProvider(
-                                      create: (BuildContext context) =>
-                                          PostListUserBloc(),
-                                      child: Profile(user: state.post!.author!),
-                                    ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BlocProvider(
+                                    create: (BuildContext context) =>
+                                        PostListUserBloc(),
+                                    child: Profile(user: state.post!.author!),
                                   ),
-                                );
-                              },
-                              child: Text(
-                                state.post!.author!.name!,
-                                style: const TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 20,
                                 ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              getDate(state.post!),
+                              );
+                            },
+                            child: Text(
+                              state.post!.author!.name!,
                               style: const TextStyle(
-                                color: Colors.white60,
+                                color: Colors.blueGrey,
+                                fontSize: 20,
                               ),
                             ),
-                          ],
-                        ),
-                        Text(
-                          state.post!.content!,
-                        ),
-                        if (state.post!.image != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Center(
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            getDate(state.post!),
+                            style: const TextStyle(
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        state.post!.content!,
+                      ),
+                      if (state.post!.image != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 300,
+                              ),
                               child: Image.network(state.post!.image!.url!),
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                      const Divider(
+                        indent: 16,
+                        endIndent: 16,
+                        color: Colors.white70,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: state.post!.comments!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CommentItem(comment: state.post!.comments![index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   );
                 case StateStatusEnum.error:
                   return Center(
