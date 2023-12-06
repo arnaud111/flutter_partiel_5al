@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/widget/post/comment_item.dart';
-import 'package:flutter_partiel_5al/widget/view/profile.dart';
+import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
 
-import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
 import '../../model/post.dart';
 
@@ -40,7 +39,7 @@ class _PostDetailState extends State<PostDetail> {
             title: const Text("Post Detail"),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: BlocBuilder<PostDetailBloc, PostDetailState>(
                 builder: (context, state) {
               switch (state.status.status) {
@@ -60,40 +59,9 @@ class _PostDetailState extends State<PostDetail> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      BlocProvider(
-                                    create: (BuildContext context) =>
-                                        PostListUserBloc(),
-                                    child: Profile(user: state.post!.author!),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              state.post!.author!.name!,
-                              style: const TextStyle(
-                                color: Colors.blueGrey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            getDate(state.post!),
-                            style: const TextStyle(
-                              color: Colors.white60,
-                            ),
-                          ),
-                        ],
+                      RowInfoAuthor(
+                        createdAt: state.post!.createdAt!,
+                        author: state.post!.author!,
                       ),
                       Text(
                         state.post!.content!,
@@ -120,8 +88,11 @@ class _PostDetailState extends State<PostDetail> {
                           itemCount: state.post!.comments!.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CommentItem(comment: state.post!.comments![index]),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                              ),
+                              child: CommentItem(
+                                  comment: state.post!.comments![index]),
                             );
                           },
                         ),

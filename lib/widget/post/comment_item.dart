@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
 
-import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import '../../model/comment.dart';
-import '../view/profile.dart';
 
 class CommentItem extends StatelessWidget {
   const CommentItem({
@@ -27,41 +25,11 @@ class CommentItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => BlocProvider(
-                          create: (BuildContext context) => PostListUserBloc(),
-                          child: Profile(user: comment.author!),
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    comment.author?.name ?? "",
-                    style: const TextStyle(
-                      color: Colors.blueGrey,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  getDate(),
-                  style: const TextStyle(
-                    color: Colors.white60,
-                  ),
-                ),
-              ],
+            RowInfoAuthor(
+              createdAt: comment.createdAt!,
+              author: comment.author!,
             ),
-            Text(
-              comment.content!
-            ),
+            Text(comment.content!),
           ],
         ),
       ),
