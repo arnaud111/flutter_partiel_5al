@@ -2,15 +2,17 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:meta/meta.dart';
 
-import '../../api/http_error.dart';
-import '../../api/user/user_api.dart';
+import '../../datasource/api/http_error.dart';
+import '../../datasource/repository/user_repository.dart';
 import '../../model/post_list.dart';
 
 part 'post_list_user_event.dart';
 part 'post_list_user_state.dart';
 
 class PostListUserBloc extends Bloc<PostListUserEvent, PostListUserState> {
-  PostListUserBloc() : super(PostListUserState(status: StateStatus.initial())) {
+  final UserRepository userRepository;
+
+  PostListUserBloc({required this.userRepository}) : super(PostListUserState(status: StateStatus.initial())) {
     on<Init>(_onInit);
     on<GetListPost>(_onGetListPost);
   }
@@ -27,7 +29,7 @@ class PostListUserBloc extends Bloc<PostListUserEvent, PostListUserState> {
     ));
 
     try {
-      PostList postList = await UserApi.getPostByUserId(event.userId, null, null);
+      PostList postList = await userRepository.getPostByUserId(event.userId, null, null);
 
       emit(PostListUserState(
         status: StateStatus.success(),

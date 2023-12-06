@@ -1,18 +1,18 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:flutter_partiel_5al/api/post/post_api.dart';
 import 'package:flutter_partiel_5al/model/post.dart';
 import 'package:meta/meta.dart';
 
-import '../../api/http_error.dart';
+import '../../datasource/api/http_error.dart';
+import '../../datasource/repository/post_repository.dart';
 import '../state_status.dart';
 
 part 'post_detail_event.dart';
 part 'post_detail_state.dart';
 
 class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
-  PostDetailBloc() : super(PostDetailState(status: StateStatus.initial())) {
+  final PostRepository postRepository;
+
+  PostDetailBloc({required this.postRepository}) : super(PostDetailState(status: StateStatus.initial())) {
     on<Init>(_onInit);
     on<Get>(_onGet);
   }
@@ -29,7 +29,7 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
     ));
 
     try {
-      Post post = await PostApi.getById(event.postId);
+      Post post = await postRepository.getById(event.postId);
 
       emit(PostDetailState(
         status: StateStatus.success(),

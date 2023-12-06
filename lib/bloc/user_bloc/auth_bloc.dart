@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_partiel_5al/api/auth/auth_api.dart';
-import 'package:flutter_partiel_5al/api/http_error.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/datasource/repository/auth_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../datasource/api/http_error.dart';
 import '../../model/auth.dart';
 
 part 'auth_event.dart';
@@ -12,7 +12,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthState(status: StateStatus.initial())) {
+  final AuthRepository authRepository;
+
+  AuthBloc({required this.authRepository}) : super(AuthState(status: StateStatus.initial())) {
     on<Me>(_onMe);
     on<Init>(_onInit);
     on<Disconnect>(_onDisconnect);
@@ -33,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
 
     try {
-      Auth auth = await AuthApi.me();
+      Auth auth = await authRepository.me();
 
       emit(state.copyWith(
         status: StateStatus.success(),
@@ -70,11 +72,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
 
     try {
-      String token = await AuthApi.login(event.email, event.password);
+      String token = await authRepository.login(event.email, event.password);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("auth_token", token);
 
-      Auth auth = await AuthApi.me();
+      Auth auth = await authRepository.me();
 
       emit(state.copyWith(
         status: StateStatus.success(),
@@ -103,11 +105,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try {
       String token =
-          await AuthApi.signup(event.name, event.email, event.password);
+          await authRepository.signup(event.name, event.email, event.password);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("auth_token", token);
 
-      Auth auth = await AuthApi.me();
+      Auth auth = await authRepository.me();
 
       emit(state.copyWith(
         status: StateStatus.success(),

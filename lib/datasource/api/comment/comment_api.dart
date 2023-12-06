@@ -1,15 +1,19 @@
-import 'package:flutter_partiel_5al/api/api.dart';
+import 'package:flutter_partiel_5al/datasource/abstract/comment_datasource.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CommentApi extends Api {
+import '../api.dart';
 
-  static Future<void> delete(int commentId) async {
+class CommentApi extends CommentDataSource {
+
+  @override
+  Future<void> delete(int commentId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
     await Api.dio.delete("/comment/$commentId");
   }
 
-  static Future<void> patch(int commentId, String content) async {
+  @override
+  Future<void> patch(int commentId, String content) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
     await Api.dio.patch("/comment/$commentId", data: {
@@ -17,7 +21,8 @@ class CommentApi extends Api {
     });
   }
 
-  static Future<void> post(int postId, String content) async {
+  @override
+  Future<void> post(int postId, String content) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] = "Bearer ${prefs.getString('auth_token')}";
     await Api.dio.patch("/comment", data: {

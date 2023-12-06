@@ -1,18 +1,21 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_partiel_5al/api/post/post_api.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/datasource/repository/post_repository.dart';
 import 'package:meta/meta.dart';
 
-import '../../api/http_error.dart';
+import '../../datasource/api/http_error.dart';
+
 
 part 'post_management_event.dart';
 
 part 'post_management_state.dart';
 
 class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> {
-  PostManagementBloc() : super(PostManagementState(status: StateStatus.initial())) {
+  final PostRepository postRepository;
+
+  PostManagementBloc({required this.postRepository}) : super(PostManagementState(status: StateStatus.initial())) {
     on<CreatePostEvent>(_onCreatePost);
     on<Init>(_onInit);
   }
@@ -29,7 +32,7 @@ class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> 
     ));
 
     try {
-      await PostApi.post(event.content, event.image);
+      await postRepository.post(event.content, event.image);
 
       emit(PostManagementState(
         status: StateStatus.success(),

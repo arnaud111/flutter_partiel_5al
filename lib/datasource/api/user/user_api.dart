@@ -1,12 +1,14 @@
-import 'package:flutter_partiel_5al/api/api.dart';
+import 'package:flutter_partiel_5al/datasource/abstract/user_datasource.dart';
 import 'package:flutter_partiel_5al/model/user.dart';
 
-import '../../model/post_list.dart';
+import '../../../model/post_list.dart';
+import '../api.dart';
 import '../http_error.dart';
 
-class UserApi extends Api {
+class UserApi extends UserDataSource {
 
-  static Future<PostList> getPostByUserId(int userId, int? page, int? perPage) async {
+  @override
+  Future<PostList> getPostByUserId(int userId, int? page, int? perPage) async {
     final response = await Api.dio.get("/user/$userId/posts", data: {
       "page": page,
       "per_page": perPage,
@@ -17,7 +19,8 @@ class UserApi extends Api {
     return PostList.fromJson(response.data);
   }
 
-  static Future<User> getById(int? userId) async {
+  @override
+  Future<User> getById(int? userId) async {
     final response = await Api.dio.get("/user/$userId");
     if (response.statusCode != 200) {
       throw HttpError.fromJson(response.data);

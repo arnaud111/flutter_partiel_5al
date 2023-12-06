@@ -1,15 +1,18 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_partiel_5al/api/api.dart';
+import 'package:flutter_partiel_5al/datasource/abstract/post_datasource.dart';
 import 'package:flutter_partiel_5al/model/post.dart';
 import 'package:flutter_partiel_5al/model/post_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../api.dart';
 import '../http_error.dart';
 
-class PostApi extends Api {
-  static Future<void> delete(int postId) async {
+class PostApi extends PostDataSource {
+
+  @override
+  Future<void> delete(int postId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] =
         "Bearer ${prefs.getString('auth_token')}";
@@ -19,7 +22,8 @@ class PostApi extends Api {
     }
   }
 
-  static Future<Post> getById(int postId) async {
+  @override
+  Future<Post> getById(int postId) async {
     final response = await Api.dio.get("/post/$postId");
     if (response.statusCode != 200) {
       throw HttpError.fromJson(response.data);
@@ -27,7 +31,8 @@ class PostApi extends Api {
     return Post.fromJson(response.data);
   }
 
-  static Future<Post> patch(int postId, String? content, String? image) async {
+  @override
+  Future<Post> patch(int postId, String? content, String? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] =
         "Bearer ${prefs.getString('auth_token')}";
@@ -41,7 +46,8 @@ class PostApi extends Api {
     return Post.fromJson(response.data);
   }
 
-  static Future<PostList> get(int? page, int? perPage) async {
+  @override
+  Future<PostList> get(int? page, int? perPage) async {
     final response = await Api.dio.get("/post", data: {
       "page": page,
       "per_page": perPage,
@@ -52,7 +58,8 @@ class PostApi extends Api {
     return PostList.fromJson(response.data);
   }
 
-  static Future<Post> post(String content, File? image) async {
+  @override
+  Future<Post> post(String content, File? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] =
         "Bearer ${prefs.getString('auth_token')}";
