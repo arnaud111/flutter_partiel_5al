@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
-import 'package:flutter_partiel_5al/bloc/state_status.dart';
-import 'package:flutter_partiel_5al/front/widget/loading.dart';
+import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:flutter_partiel_5al/front/form/image_picker_field.dart';
 
 class CreatePostScreen extends StatelessWidget {
-
   static const String routeName = "/createPost";
 
   static void navigateTo(BuildContext context) {
@@ -21,7 +19,7 @@ class CreatePostScreen extends StatelessWidget {
 
   void sendForm(BuildContext context) {
     final postManagementBloc = BlocProvider.of<PostManagementBloc>(context);
-    postManagementBloc.add(CreatePostEvent(
+    postManagementBloc.add(Create(
       content: textController.text,
       image: imagePickerController.image,
     ));
@@ -35,58 +33,49 @@ class CreatePostScreen extends StatelessWidget {
       ),
       body: BlocBuilder<PostManagementBloc, PostManagementState>(
         builder: (context, state) {
-          if (state.status.status == StateStatusEnum.success) {
+          if (state.status == PostStatusEnum.created) {
             Future.delayed(Duration.zero, () {
               Navigator.of(context).pop();
             });
             return Container();
           }
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 16,
-                  right: 16,
-                ),
-                child: Wrap(
-                  runSpacing: 16,
-                  children: [
-                    TextField(
-                      controller: textController,
-                      maxLines: 8,
-                      decoration: const InputDecoration(
-                        hintText: "Enter your message",
-                        fillColor: Colors.black12,
-                        filled: true,
-                        border: InputBorder.none,
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        state.status.message ?? "",
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
-                    ImagePickerField(
-                      imagePickerController: imagePickerController,
-                    ),
-                  ],
-                ),
+          return StackLoading(
+            loadingCondition: () {
+              return state.status == PostStatusEnum.loading;
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                left: 16,
+                right: 16,
               ),
-              state.status.status == StateStatusEnum.loading ? Container(
-                color: Colors.black54,
-              ) : Container(),
-              state.status.status == StateStatusEnum.loading ? const Center(
-                child: SizedBox(
-                  width: 300,
-                  height: 200,
-                  child: Loading(),
-                ),
-              ) : Container(),
-            ],
+              child: Wrap(
+                runSpacing: 16,
+                children: [
+                  TextField(
+                    controller: textController,
+                    maxLines: 8,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your message",
+                      fillColor: Colors.black12,
+                      filled: true,
+                      border: InputBorder.none,
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      state.message ?? "",
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  ImagePickerField(
+                    imagePickerController: imagePickerController,
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

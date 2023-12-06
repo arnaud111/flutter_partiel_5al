@@ -90,10 +90,19 @@ class MyApp extends StatelessWidget {
               case PostDetailScreen.routeName:
                 final arguments = settings.arguments;
                 if (arguments is int) {
-                  content = BlocProvider(
-                    create: (context) => PostDetailBloc(
-                      postRepository: context.read<PostRepository>(),
-                    ),
+                  content = MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => PostDetailBloc(
+                          postRepository: context.read<PostRepository>(),
+                        ),
+                      ),
+                      BlocProvider(
+                        create: (context) => PostManagementBloc(
+                          postRepository: context.read<PostRepository>(),
+                        ),
+                      ),
+                    ],
                     child: PostDetailScreen(postId: arguments),
                   );
                 }

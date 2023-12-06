@@ -3,15 +3,24 @@ part of 'post_management_bloc.dart';
 @immutable
 abstract class PostManagementEvent {}
 
-class Init extends PostManagementEvent {}
+class InitPostManagement extends PostManagementEvent {}
 
-class CreatePostEvent extends PostManagementEvent {
+class Create extends PostManagementEvent {
 
   final String content;
   final File? image;
 
-  CreatePostEvent({
+  Create({
     required this.content,
     this.image,
+  });
+}
+
+class Delete extends PostManagementEvent {
+
+  final int postId;
+
+  Delete({
+    required this.postId,
   });
 }
