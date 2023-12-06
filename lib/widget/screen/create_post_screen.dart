@@ -5,8 +5,15 @@ import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:flutter_partiel_5al/widget/form/image_picker_field.dart';
 
-class CreatePost extends StatelessWidget {
-  CreatePost({super.key});
+class CreatePostScreen extends StatelessWidget {
+
+  static const String routeName = "/createPost";
+
+  static void navigateTo(BuildContext context) {
+    Navigator.of(context).pushNamed(routeName);
+  }
+
+  CreatePostScreen({super.key});
 
   final ImagePickerController imagePickerController = ImagePickerController();
   final TextEditingController textController = TextEditingController();

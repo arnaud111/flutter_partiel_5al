@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/model/user.dart';
 
-import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
-import '../view/profile.dart';
+import '../screen/profile_screen.dart';
 
 class RowInfoAuthor extends StatelessWidget {
   const RowInfoAuthor({
@@ -22,7 +20,7 @@ class RowInfoAuthor extends StatelessWidget {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => onClickProfile(context),
+          onTap: clickableProfile ? () => onClickProfile(context) : null,
           child: Text(
             author.name ?? "",
             style: const TextStyle(
@@ -44,17 +42,7 @@ class RowInfoAuthor extends StatelessWidget {
   }
 
   void onClickProfile(BuildContext context) {
-    if (clickableProfile) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => BlocProvider(
-            create: (BuildContext context) => PostListUserBloc(),
-            child: Profile(user: author),
-          ),
-        ),
-      );
-    }
+    ProfileScreen.navigateTo(context, author);
   }
 
   String getDate() {

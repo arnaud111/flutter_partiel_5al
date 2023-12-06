@@ -6,16 +6,23 @@ import '../../bloc/post_list_user_bloc/post_list_user_bloc.dart';
 import '../../model/user.dart';
 import '../post/post_item.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key, required this.user});
+class ProfileScreen extends StatefulWidget {
+
+  static const String routeName = "/profile";
+
+  static void navigateTo(BuildContext context, User user) {
+    Navigator.of(context).pushNamed(routeName, arguments: user);
+  }
+
+  const ProfileScreen({super.key, required this.user});
 
   final User user;
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {

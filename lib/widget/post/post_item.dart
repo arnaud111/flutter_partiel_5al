@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
-import 'package:flutter_partiel_5al/widget/view/post_detail.dart';
+import 'package:flutter_partiel_5al/widget/screen/post_detail_screen.dart';
 
-import '../../bloc/post_detail_bloc/post_detail_bloc.dart';
 import '../../model/post.dart';
 
 class PostItem extends StatelessWidget {
@@ -20,15 +18,7 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => BlocProvider(
-              create: (BuildContext context) => PostDetailBloc(),
-              child: PostDetail(postId: post.id!),
-            ),
-          ),
-        );
+        PostDetailScreen.navigateTo(context, post.id!);
       },
       child: Container(
         decoration: const BoxDecoration(

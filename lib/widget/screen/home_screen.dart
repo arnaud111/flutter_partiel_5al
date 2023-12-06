@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
-import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/widget/drawer_profile/drawer_profile.dart';
 import 'package:flutter_partiel_5al/widget/post/list_post.dart';
 
-import 'create_post.dart';
+import 'create_post_screen.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
@@ -42,15 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
               if (state.status.status != StateStatusEnum.success) {
                 Scaffold.of(context).openDrawer();
               } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => BlocProvider(
-                      create: (BuildContext context) => PostManagementBloc(),
-                      child: CreatePost(),
-                    ),
-                  ),
-                );
+                CreatePostScreen.navigateTo(context);
               }
             },
             backgroundColor: const Color(0xFF626af7),

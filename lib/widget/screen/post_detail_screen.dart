@@ -8,8 +8,15 @@ import 'package:flutter_partiel_5al/widget/post/row_info_author.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
 import '../../model/post.dart';
 
-class PostDetail extends StatefulWidget {
-  const PostDetail({
+class PostDetailScreen extends StatefulWidget {
+
+  static const String routeName = "/postDetails";
+
+  static void navigateTo(BuildContext context, int postId) {
+    Navigator.of(context).pushNamed(routeName, arguments: postId);
+  }
+
+  const PostDetailScreen({
     super.key,
     required this.postId,
   });
@@ -17,10 +24,11 @@ class PostDetail extends StatefulWidget {
   final int postId;
 
   @override
-  State<PostDetail> createState() => _PostDetailState();
+  State<PostDetailScreen> createState() => _PostDetailScreenState();
 }
 
-class _PostDetailState extends State<PostDetail> {
+class _PostDetailScreenState extends State<PostDetailScreen> {
+
   @override
   void initState() {
     super.initState();
