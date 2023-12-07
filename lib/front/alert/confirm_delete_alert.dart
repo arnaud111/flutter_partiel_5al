@@ -7,19 +7,19 @@ class ConfirmDeleteAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Supprimer",
+        "Delete",
         style: TextStyle(
           color: Colors.redAccent,
         ),
       ),
       content: const Text(
-        "Êtes vous sûr de vouloir supprimer l'élément ?",
+        "Are you sure you want to delete this item ?",
       ),
       actions: [
         GestureDetector(
           onTap: () => Navigator.pop(context, false),
           child: const Text(
-            "Annuler",
+            "Cancel",
             style: TextStyle(
               color: Colors.blueGrey,
             ),
@@ -28,7 +28,7 @@ class ConfirmDeleteAlert extends StatelessWidget {
         GestureDetector(
           onTap: () => Navigator.pop(context, true),
           child: const Text(
-            "Confirmer",
+            "Delete",
             style: TextStyle(
               color: Colors.redAccent,
             ),

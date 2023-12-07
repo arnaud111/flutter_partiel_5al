@@ -46,7 +46,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Modifier"),
+        title: const Text("Edit"),
       ),
       body: BlocBuilder<PostManagementBloc, PostManagementState>(
         builder: (context, state) {
