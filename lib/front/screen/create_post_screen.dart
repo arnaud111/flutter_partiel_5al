@@ -5,6 +5,8 @@ import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:flutter_partiel_5al/front/form/image_picker_field.dart';
 
+import '../../bloc/post_list_bloc/post_list_bloc.dart';
+
 class CreatePostScreen extends StatelessWidget {
   static const String routeName = "/createPost";
 
@@ -35,6 +37,8 @@ class CreatePostScreen extends StatelessWidget {
         builder: (context, state) {
           if (state.status == PostStatusEnum.created) {
             Future.delayed(Duration.zero, () {
+              final postListBloc = BlocProvider.of<PostListBloc>(context);
+              postListBloc.add(GetListPost());
               Navigator.of(context).pop();
             });
             return Container();

@@ -28,7 +28,12 @@ class StackLoading extends StatelessWidget {
                   width: 300,
                   height: 200,
                   child: Container(
-                    color: const Color(0xFF31363B),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      color: Color(0xFF31363B),
+                    ),
                     child: const Loading(),
                   ),
                 ),

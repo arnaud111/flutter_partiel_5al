@@ -9,6 +9,7 @@ import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 
+import '../../bloc/post_list_bloc/post_list_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -54,6 +55,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       builder: (context, postManagementState) {
         if (postManagementState.status == PostStatusEnum.deleted) {
           Future.delayed(Duration.zero, () {
+            final postListBloc = BlocProvider.of<PostListBloc>(context);
+            postListBloc.add(GetListPost());
             Navigator.of(context).pop();
           });
         } else if (postManagementState.status == PostStatusEnum.updated) {

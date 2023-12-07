@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_detail_bloc/post_detail_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/user_bloc/auth_bloc.dart';
 import 'package:flutter_partiel_5al/datasource/api/auth/auth_api.dart';
@@ -56,6 +57,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (BuildContext context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (BuildContext context) => PostListBloc(
+              postRepository: context.read<PostRepository>(),
             ),
           ),
         ],
