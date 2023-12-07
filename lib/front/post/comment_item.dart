@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/comment_management_bloc/comment_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/datasource/repository/comment_repository.dart';
+import 'package:flutter_partiel_5al/front/alert/edit_comment_alert.dart';
 import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 
 import '../../bloc/user_bloc/auth_bloc.dart';
@@ -16,6 +17,34 @@ class CommentItem extends StatelessWidget {
   });
 
   final Comment comment;
+
+  void edit(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => EditCommentAlert(
+        comment: comment,
+      ),
+    );
+  }
+
+  void delete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const ConfirmDeleteAlert(),
+    ).then((confirm) {
+      if (confirm == true) {
+        final postListBloc = BlocProvider.of<CommentManagementBloc>(context);
+        postListBloc.add(DeleteComment(
+          commentId: comment.id!,
+        ));
+      }
+    });
+  }
+
+  String getDate() {
+    DateTime dataTime = DateTime.fromMillisecondsSinceEpoch(comment.createdAt!);
+    return "${dataTime.year}/${dataTime.month}/${dataTime.day} ${dataTime.hour}:${dataTime.minute}";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +77,7 @@ class CommentItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: edit,
+                          onTap: () => edit(context),
                           child: const Icon(
                             Icons.edit,
                             color: Colors.blueAccent,
@@ -73,26 +102,5 @@ class CommentItem extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void edit() {}
-
-  void delete(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const ConfirmDeleteAlert(),
-    ).then((confirm) {
-      if (confirm == true) {
-        final postListBloc = BlocProvider.of<CommentManagementBloc>(context);
-        postListBloc.add(DeleteComment(
-          commentId: comment.id!,
-        ));
-      }
-    });
-  }
-
-  String getDate() {
-    DateTime dataTime = DateTime.fromMillisecondsSinceEpoch(comment.createdAt!);
-    return "${dataTime.year}/${dataTime.month}/${dataTime.day} ${dataTime.hour}:${dataTime.minute}";
   }
 }
