@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_partiel_5al/bloc/comment_management_bloc/comment_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_detail_bloc/post_detail_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/datasource/repository/comment_repository.dart';
 import 'package:flutter_partiel_5al/front/alert/confirm_delete_alert.dart';
 import 'package:flutter_partiel_5al/front/post/comment_item.dart';
 import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
@@ -13,6 +15,8 @@ import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 import '../../bloc/post_list_bloc/post_list_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
 import '../../model/post.dart';
+import '../alert/login_alert.dart';
+import '../alert/send_comment_alert.dart';
 
 class PostDetailScreen extends StatefulWidget {
   static const String routeName = "/postDetails";
@@ -97,7 +101,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             ),
                             if (postState.post!.image != null)
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 child: Center(
                                   child: ConstrainedBox(
                                     constraints: const BoxConstraints(
@@ -145,6 +150,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               endIndent: 16,
                               color: Colors.white70,
                             ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (authState.status.status ==
+                                        StateStatusEnum.success) {
+                                      addComment(widget.postId);
+                                    } else {
+                                      displayLogin();
+                                    }
+                                  },
+                                  child: const Icon(
+                                    Icons.add,
+                                  ),
+                                ),
+                              ],
+                            ),
                             Expanded(
                               child: ListView.builder(
                                 itemCount: postState.post!.comments!.length,
@@ -175,6 +200,31 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         );
       },
     );
+  }
+
+  void displayLogin() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const LoginAlert(),
+    );
+  }
+
+  void addComment(int postId) {
+    showDialog(
+      context: context,
+      builder: (context) => BlocProvider(
+        create: (context) => CommentManagementBloc(
+          commentRepository: context.read<CommentRepository>(),
+        ),
+        child: SendCommentAlert(
+          postId: postId,
+        ),
+      ),
+    ).then((value) {
+      if (value == true) {
+        getPost();
+      }
+    });
   }
 
   void edit(Post post) {
