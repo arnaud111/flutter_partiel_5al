@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
+import 'package:flutter_partiel_5al/front/alert/signup_alert.dart';
 import 'package:flutter_partiel_5al/front/form/text_from_field_sexy.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
@@ -86,6 +87,22 @@ class _LoginAlertState extends State<LoginAlert> {
                           backgroundColor: const Color(0xFF626af7),
                         ),
                         child: const Text("Login"),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => const SignupAlert(),
+                      );
+                    },
+                    child: const Text(
+                      "Signup",
+                      style: TextStyle(
+                        color: Colors.white54,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
