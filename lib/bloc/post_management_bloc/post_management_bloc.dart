@@ -18,6 +18,7 @@ class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> 
     on<InitPostManagement>(_onInit);
     on<Create>(_onCreate);
     on<Delete>(_onDelete);
+    on<Update>(_onUpdate);
   }
 
   void _onInit(InitPostManagement event, Emitter<PostManagementState> emit) async {
@@ -36,6 +37,30 @@ class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> 
 
       emit(PostManagementState(
         status: PostStatusEnum.created,
+      ));
+    } on HttpError catch (e) {
+      emit(PostManagementState(
+        status: PostStatusEnum.error,
+        message: e.message,
+      ));
+    } catch (e) {
+      emit(PostManagementState(
+        status: PostStatusEnum.error,
+        message: "Error, please retry later !",
+      ));
+    }
+  }
+
+  void _onUpdate(Update event, Emitter<PostManagementState> emit) async {
+    emit(PostManagementState(
+      status: PostStatusEnum.loading,
+    ));
+
+    try {
+      await postRepository.patch(event.postId, event.content, event.image);
+
+      emit(PostManagementState(
+        status: PostStatusEnum.updated,
       ));
     } on HttpError catch (e) {
       emit(PostManagementState(

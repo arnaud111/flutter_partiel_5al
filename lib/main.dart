@@ -11,6 +11,8 @@ import 'package:flutter_partiel_5al/datasource/api/user/user_api.dart';
 import 'package:flutter_partiel_5al/datasource/repository/auth_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/post_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/user_repository.dart';
+import 'package:flutter_partiel_5al/front/screen/edit_post_screen.dart';
+import 'package:flutter_partiel_5al/model/post.dart';
 import 'package:flutter_partiel_5al/model/user.dart';
 import 'package:flutter_partiel_5al/front/screen/create_post_screen.dart';
 import 'package:flutter_partiel_5al/front/screen/post_detail_screen.dart';
@@ -121,6 +123,17 @@ class MyApp extends StatelessWidget {
                       userRepository: context.read<UserRepository>(),
                     ),
                     child: ProfileScreen(user: arguments),
+                  );
+                }
+                break;
+              case EditPostScreen.routeName:
+                final arguments = settings.arguments;
+                if (arguments is Post) {
+                  content = BlocProvider(
+                    create: (context) => PostManagementBloc(
+                      postRepository: context.read<PostRepository>(),
+                    ),
+                    child: EditPostScreen(post: arguments),
                   );
                 }
                 break;

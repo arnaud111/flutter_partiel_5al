@@ -6,11 +6,13 @@ import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/front/alert/confirm_delete_alert.dart';
 import 'package:flutter_partiel_5al/front/post/comment_item.dart';
 import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
+import 'package:flutter_partiel_5al/front/screen/edit_post_screen.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 
 import '../../bloc/post_list_bloc/post_list_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
+import '../../model/post.dart';
 
 class PostDetailScreen extends StatefulWidget {
   static const String routeName = "/postDetails";
@@ -107,16 +109,16 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 ),
                               ),
                             BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, stateAuth) {
-                                if (stateAuth.status.status ==
+                              builder: (context, authState) {
+                                if (authState.status.status ==
                                         StateStatusEnum.success &&
-                                    stateAuth.auth!.id ==
+                                    authState.auth!.id ==
                                         postState.post!.author!.id) {
                                   return Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       GestureDetector(
-                                        onTap: edit,
+                                        onTap: () => edit(postState.post!),
                                         child: const Icon(
                                           Icons.edit,
                                           color: Colors.blueAccent,
@@ -175,7 +177,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
-  void edit() {}
+  void edit(Post post) {
+    EditPostScreen.navigateTo(context, post);
+  }
 
   void delete() {
     showDialog(

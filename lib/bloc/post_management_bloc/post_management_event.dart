@@ -16,6 +16,19 @@ class Create extends PostManagementEvent {
   });
 }
 
+class Update extends PostManagementEvent {
+
+  final int postId;
+  final String? content;
+  final File? image;
+
+  Update({
+    required this.postId,
+    this.content,
+    this.image,
+  });
+}
+
 class Delete extends PostManagementEvent {
 
   final int postId;

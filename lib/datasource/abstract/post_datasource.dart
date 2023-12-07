@@ -10,7 +10,7 @@ abstract class PostDataSource {
 
   Future<Post> getById(int postId);
 
-  Future<Post> patch(int postId, String? content, String? image);
+  Future<Post> patch(int postId, String? content, File? image);
 
   Future<PostList> get(int? page, int? perPage);
 

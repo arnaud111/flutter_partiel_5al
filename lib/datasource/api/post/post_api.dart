@@ -32,13 +32,15 @@ class PostApi extends PostDataSource {
   }
 
   @override
-  Future<Post> patch(int postId, String? content, String? image) async {
+  Future<Post> patch(int postId, String? content, File? image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Api.dio.options.headers["Authorization"] =
         "Bearer ${prefs.getString('auth_token')}";
     final response = await Api.dio.patch("/post/$postId", data: {
       "content": content,
-      "base_64_image": image,
+      "base_64_image": image != null ? await MultipartFile.fromFile(
+        image.path,
+      ) : null,
     });
     if (response.statusCode != 200) {
       throw HttpError.fromJson(response.data);
