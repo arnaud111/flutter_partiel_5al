@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/front/post/post_item.dart';
+import 'package:flutter_partiel_5al/front/widget/error_refresh.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
 class ListPost extends StatelessWidget {
@@ -42,29 +43,13 @@ class ListPost extends StatelessWidget {
               ),
             );
           case StateStatusEnum.error:
-            return RefreshIndicator(
+            return ErrorRefresh(
               onRefresh: () async {
-                final postListBloc = BlocProvider.of<PostListBloc>(context);
-                postListBloc.add(GetListPost());
+                if (refreshListFunction != null) {
+                  refreshListFunction!();
+                }
               },
-              child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 300,
-                  ),
-                  const Icon(
-                    Icons.error,
-                    size: 64,
-                    color: Colors.redAccent,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Center(
-                    child: Text(state.status.message ?? ""),
-                  ),
-                ],
-              ),
+              errorMessage: state.status.message!,
             );
         }
       },

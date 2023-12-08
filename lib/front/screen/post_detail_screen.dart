@@ -9,6 +9,7 @@ import 'package:flutter_partiel_5al/front/alert/confirm_delete_alert.dart';
 import 'package:flutter_partiel_5al/front/post/comment_item.dart';
 import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 import 'package:flutter_partiel_5al/front/screen/edit_post_screen.dart';
+import 'package:flutter_partiel_5al/front/widget/error_refresh.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 import 'package:flutter_partiel_5al/model/routes_arguments/edit_post_route_arguments.dart';
@@ -22,7 +23,8 @@ import '../alert/send_comment_alert.dart';
 class PostDetailScreen extends StatefulWidget {
   static const String routeName = "/postDetails";
 
-  static void navigateTo(BuildContext context, PostDetailRouteArguments arguments) {
+  static void navigateTo(
+      BuildContext context, PostDetailRouteArguments arguments) {
     Navigator.of(context).pushNamed(routeName, arguments: arguments);
   }
 
@@ -246,8 +248,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           ],
                         );
                       case StateStatusEnum.error:
-                        return Center(
-                          child: Text(postState.status.message!),
+                        return ErrorRefresh(
+                          onRefresh: () async {
+                            getPost();
+                          },
+                          errorMessage: postState.status.message!,
                         );
                     }
                   }),
