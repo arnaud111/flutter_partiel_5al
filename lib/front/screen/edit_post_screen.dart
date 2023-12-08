@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_partiel_5al/model/post.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/edit_post_route_arguments.dart';
 
-import '../../bloc/post_list_bloc/post_list_bloc.dart';
 import '../../bloc/post_management_bloc/post_management_bloc.dart';
 import '../../model/image_picker_controller.dart';
 import '../form/image_picker_field.dart';
@@ -11,13 +11,18 @@ import '../widget/stack_loading.dart';
 class EditPostScreen extends StatefulWidget {
   static const String routeName = "/editPost";
 
-  static void navigateTo(BuildContext context, Post post) {
-    Navigator.of(context).pushNamed(routeName, arguments: post);
+  static void navigateTo(BuildContext context, EditPostRouteArguments arguments) {
+    Navigator.of(context).pushNamed(routeName, arguments: arguments);
   }
 
-  EditPostScreen({super.key, required this.post});
+  const EditPostScreen({
+    super.key,
+    required this.post,
+    this.onDispose,
+  });
 
   final Post post;
+  final Function? onDispose;
 
   @override
   State<EditPostScreen> createState() => _EditPostScreenState();
@@ -31,6 +36,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
   void initState() {
     super.initState();
     textController.text = widget.post.content!;
+  }
+
+  @override
+  void dispose() {
+    if (widget.onDispose != null) {
+      widget.onDispose!();
+    }
+    super.dispose();
   }
 
   void sendForm(BuildContext context) {
@@ -52,8 +65,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         builder: (context, state) {
           if (state.status == PostStatusEnum.updated) {
             Future.delayed(Duration.zero, () {
-              final postListBloc = BlocProvider.of<PostListBloc>(context);
-              postListBloc.add(GetListPost());
               Navigator.of(context).pop();
             });
             return Container();

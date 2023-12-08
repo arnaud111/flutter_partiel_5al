@@ -4,20 +4,37 @@ import 'package:flutter_partiel_5al/bloc/post_management_bloc/post_management_bl
 import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
 import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:flutter_partiel_5al/front/form/image_picker_field.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/create_post_route_arguments.dart';
 
-import '../../bloc/post_list_bloc/post_list_bloc.dart';
-
-class CreatePostScreen extends StatelessWidget {
+class CreatePostScreen extends StatefulWidget {
   static const String routeName = "/createPost";
 
-  static void navigateTo(BuildContext context) {
-    Navigator.of(context).pushNamed(routeName);
+  static void navigateTo(BuildContext context, CreatePostRouteArguments arguments) {
+    Navigator.of(context).pushNamed(routeName, arguments: arguments);
   }
 
-  CreatePostScreen({super.key});
+  const CreatePostScreen({
+    super.key,
+    this.onDispose,
+  });
 
+  final Function? onDispose;
+
+  @override
+  State<CreatePostScreen> createState() => _CreatePostScreenState();
+}
+
+class _CreatePostScreenState extends State<CreatePostScreen> {
   final ImagePickerController imagePickerController = ImagePickerController();
   final TextEditingController textController = TextEditingController();
+
+  @override
+  void dispose() {
+    if (widget.onDispose != null) {
+      widget.onDispose!();
+    }
+    super.dispose();
+  }
 
   void sendForm(BuildContext context) {
     final postManagementBloc = BlocProvider.of<PostManagementBloc>(context);
@@ -37,8 +54,6 @@ class CreatePostScreen extends StatelessWidget {
         builder: (context, state) {
           if (state.status == PostStatusEnum.created) {
             Future.delayed(Duration.zero, () {
-              final postListBloc = BlocProvider.of<PostListBloc>(context);
-              postListBloc.add(GetListPost());
               Navigator.of(context).pop();
             });
             return Container();

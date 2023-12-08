@@ -28,6 +28,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    getUserPostList();
+  }
+
+  void getUserPostList() {
     final postListBloc = BlocProvider.of<PostListUserBloc>(context);
     postListBloc.add(GetListPost(
       userId: widget.user.id!,
@@ -75,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: PostItem(
                             post: state.postList!.items![index].withAuthor(widget.user),
                             clickable: false,
+                            refreshFunction: getUserPostList,
                           ),
                         );
                       },

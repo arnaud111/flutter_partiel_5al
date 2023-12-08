@@ -12,7 +12,9 @@ import 'package:flutter_partiel_5al/datasource/repository/auth_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/post_repository.dart';
 import 'package:flutter_partiel_5al/datasource/repository/user_repository.dart';
 import 'package:flutter_partiel_5al/front/screen/edit_post_screen.dart';
-import 'package:flutter_partiel_5al/model/post.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/create_post_route_arguments.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/edit_post_route_arguments.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/post_detail_route_arguments.dart';
 import 'package:flutter_partiel_5al/model/user.dart';
 import 'package:flutter_partiel_5al/front/screen/create_post_screen.dart';
 import 'package:flutter_partiel_5al/front/screen/post_detail_screen.dart';
@@ -84,20 +86,26 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.dark,
           routes: {
             '/': (context) => const HomeScreen(),
-            CreatePostScreen.routeName: (context) => BlocProvider(
-                  create: (context) => PostManagementBloc(
-                    postRepository: context.read<PostRepository>(),
-                  ),
-                  child: CreatePostScreen(),
-                ),
           },
           onGenerateRoute: (settings) {
             Widget content = const SizedBox();
 
+            final arguments = settings.arguments;
             switch (settings.name) {
+              case CreatePostScreen.routeName:
+                if (arguments is CreatePostRouteArguments) {
+                  content = BlocProvider(
+                    create: (context) => PostManagementBloc(
+                      postRepository: context.read<PostRepository>(),
+                    ),
+                    child: CreatePostScreen(
+                      onDispose: arguments.onDispose,
+                    ),
+                  );
+                }
+                break;
               case PostDetailScreen.routeName:
-                final arguments = settings.arguments;
-                if (arguments is int) {
+                if (arguments is PostDetailRouteArguments) {
                   content = MultiBlocProvider(
                     providers: [
                       BlocProvider(
@@ -111,12 +119,14 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                     ],
-                    child: PostDetailScreen(postId: arguments),
+                    child: PostDetailScreen(
+                      postId: arguments.postId,
+                      onDispose: arguments.onDispose,
+                    ),
                   );
                 }
                 break;
               case ProfileScreen.routeName:
-                final arguments = settings.arguments;
                 if (arguments is User) {
                   content = BlocProvider(
                     create: (context) => PostListUserBloc(
@@ -127,13 +137,15 @@ class MyApp extends StatelessWidget {
                 }
                 break;
               case EditPostScreen.routeName:
-                final arguments = settings.arguments;
-                if (arguments is Post) {
+                if (arguments is EditPostRouteArguments) {
                   content = BlocProvider(
                     create: (context) => PostManagementBloc(
                       postRepository: context.read<PostRepository>(),
                     ),
-                    child: EditPostScreen(post: arguments),
+                    child: EditPostScreen(
+                      post: arguments.post,
+                      onDispose: arguments.onDispose,
+                    ),
                   );
                 }
                 break;

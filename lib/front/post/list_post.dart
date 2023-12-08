@@ -5,21 +5,13 @@ import 'package:flutter_partiel_5al/bloc/state_status.dart';
 import 'package:flutter_partiel_5al/front/post/post_item.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 
-class ListPost extends StatefulWidget {
-  const ListPost({super.key});
+class ListPost extends StatelessWidget {
+  const ListPost({
+    super.key,
+    required this.refreshListFunction,
+  });
 
-  @override
-  State<ListPost> createState() => _ListPostState();
-}
-
-class _ListPostState extends State<ListPost> {
-
-  @override
-  void initState() {
-    super.initState();
-    final postListBloc = BlocProvider.of<PostListBloc>(context);
-    postListBloc.add(GetListPost());
-  }
+  final Function? refreshListFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +35,7 @@ class _ListPostState extends State<ListPost> {
                     padding: const EdgeInsets.all(8.0),
                     child: PostItem(
                       post: state.postList!.items![index],
+                      refreshFunction: refreshListFunction,
                     ),
                   );
                 },

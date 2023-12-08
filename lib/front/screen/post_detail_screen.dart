@@ -11,8 +11,9 @@ import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 import 'package:flutter_partiel_5al/front/screen/edit_post_screen.dart';
 import 'package:flutter_partiel_5al/front/widget/loading.dart';
 import 'package:flutter_partiel_5al/front/widget/stack_loading.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/edit_post_route_arguments.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/post_detail_route_arguments.dart';
 
-import '../../bloc/post_list_bloc/post_list_bloc.dart';
 import '../../bloc/user_bloc/auth_bloc.dart';
 import '../../model/post.dart';
 import '../alert/login_alert.dart';
@@ -21,16 +22,18 @@ import '../alert/send_comment_alert.dart';
 class PostDetailScreen extends StatefulWidget {
   static const String routeName = "/postDetails";
 
-  static void navigateTo(BuildContext context, int postId) {
-    Navigator.of(context).pushNamed(routeName, arguments: postId);
+  static void navigateTo(BuildContext context, PostDetailRouteArguments arguments) {
+    Navigator.of(context).pushNamed(routeName, arguments: arguments);
   }
 
   const PostDetailScreen({
     super.key,
     required this.postId,
+    this.onDispose,
   });
 
   final int postId;
+  final Function? onDispose;
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -41,6 +44,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   void initState() {
     super.initState();
     getPost();
+  }
+
+  @override
+  void dispose() {
+    if (widget.onDispose != null) {
+      widget.onDispose!();
+    }
+    super.dispose();
   }
 
   void getPost() {
@@ -55,14 +66,61 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     postListBloc.add(InitPostManagement());
   }
 
+  void displayLogin() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const LoginAlert(),
+    );
+  }
+
+  void addComment(int postId) {
+    showDialog(
+      context: context,
+      builder: (context) => BlocProvider(
+        create: (context) => CommentManagementBloc(
+          commentRepository: context.read<CommentRepository>(),
+        ),
+        child: SendCommentAlert(
+          postId: postId,
+        ),
+      ),
+    ).then((value) {
+      if (value == true) {
+        getPost();
+      }
+    });
+  }
+
+  void edit(Post post) {
+    EditPostScreen.navigateTo(
+      context,
+      EditPostRouteArguments(
+        post: post,
+        onDispose: getPost,
+      ),
+    );
+  }
+
+  void delete() {
+    showDialog(
+      context: context,
+      builder: (context) => const ConfirmDeleteAlert(),
+    ).then((confirm) {
+      if (confirm == true) {
+        final postListBloc = BlocProvider.of<PostManagementBloc>(context);
+        postListBloc.add(Delete(
+          postId: widget.postId,
+        ));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostManagementBloc, PostManagementState>(
       builder: (context, postManagementState) {
         if (postManagementState.status == PostStatusEnum.deleted) {
           Future.delayed(Duration.zero, () {
-            final postListBloc = BlocProvider.of<PostListBloc>(context);
-            postListBloc.add(GetListPost());
             Navigator.of(context).pop();
           });
         } else if (postManagementState.status == PostStatusEnum.updated) {
@@ -200,48 +258,5 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         );
       },
     );
-  }
-
-  void displayLogin() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => const LoginAlert(),
-    );
-  }
-
-  void addComment(int postId) {
-    showDialog(
-      context: context,
-      builder: (context) => BlocProvider(
-        create: (context) => CommentManagementBloc(
-          commentRepository: context.read<CommentRepository>(),
-        ),
-        child: SendCommentAlert(
-          postId: postId,
-        ),
-      ),
-    ).then((value) {
-      if (value == true) {
-        getPost();
-      }
-    });
-  }
-
-  void edit(Post post) {
-    EditPostScreen.navigateTo(context, post);
-  }
-
-  void delete() {
-    showDialog(
-      context: context,
-      builder: (context) => const ConfirmDeleteAlert(),
-    ).then((confirm) {
-      if (confirm == true) {
-        final postListBloc = BlocProvider.of<PostManagementBloc>(context);
-        postListBloc.add(Delete(
-          postId: widget.postId,
-        ));
-      }
-    });
   }
 }

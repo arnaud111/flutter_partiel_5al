@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_partiel_5al/front/post/row_info_author.dart';
 import 'package:flutter_partiel_5al/front/screen/post_detail_screen.dart';
+import 'package:flutter_partiel_5al/model/routes_arguments/post_detail_route_arguments.dart';
 
 import '../../model/post.dart';
 
@@ -9,17 +10,27 @@ class PostItem extends StatelessWidget {
     super.key,
     required this.post,
     this.clickable = true,
+    this.refreshFunction,
   });
 
   final Post post;
   final bool clickable;
+  final Function? refreshFunction;
+
+  void onCLick(BuildContext context) {
+    PostDetailScreen.navigateTo(
+      context,
+      PostDetailRouteArguments(
+        postId: post.id!,
+        onDispose: refreshFunction,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        PostDetailScreen.navigateTo(context, post.id!);
-      },
+      onTap: () => onCLick(context),
       child: Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
