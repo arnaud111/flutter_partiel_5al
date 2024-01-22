@@ -30,7 +30,7 @@ class ListPost extends StatelessWidget {
                 postListBloc.add(GetListPost());
               },
               child: ListView.builder(
-                itemCount: state.postList?.itemsTotal,
+                itemCount: state.postList!.itemsReceived,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
