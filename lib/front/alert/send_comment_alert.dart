@@ -25,61 +25,65 @@ class SendCommentAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: SingleChildScrollView(
-        child: BlocBuilder<CommentManagementBloc, CommentManagementState>(
-          builder: (context, state) {
-            if (state.status == CommentStatusEnum.created) {
-              Navigator.pop(context, true);
-            }
-            if (state.status == CommentStatusEnum.loading) {
-              return const Loading();
-            }
-            return Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: contentController,
-                    maxLines: 4,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your message",
-                      fillColor: Colors.black12,
-                      filled: true,
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8.0,
-                    ),
-                    child: Text(
-                      state.message ?? "",
-                      style: const TextStyle(
-                        color: Colors.red,
+      content: BlocListener<CommentManagementBloc, CommentManagementState>(
+        listener: (context, state) {
+          if (state.status == CommentStatusEnum.created) {
+            Navigator.pop(context, true);
+          }
+        },
+        child: SingleChildScrollView(
+          child: BlocBuilder<CommentManagementBloc, CommentManagementState>(
+            builder: (context, state) {
+              if (state.status == CommentStatusEnum.loading) {
+                return const Loading();
+              }
+              return Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: contentController,
+                      maxLines: 4,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your message",
+                        fillColor: Colors.black12,
+                        filled: true,
+                        border: InputBorder.none,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                    ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => sendComment(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF626af7),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                      ),
+                      child: Text(
+                        state.message ?? "",
+                        style: const TextStyle(
+                          color: Colors.red,
                         ),
-                        child: const Text("Send"),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => sendComment(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF626af7),
+                          ),
+                          child: const Text("Send"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

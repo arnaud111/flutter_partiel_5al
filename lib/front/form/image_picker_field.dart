@@ -5,7 +5,7 @@ import 'package:flutter_partiel_5al/model/image_picker_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerField extends StatefulWidget {
-  ImagePickerField({
+  const ImagePickerField({
     super.key,
     required this.imagePickerController,
   });

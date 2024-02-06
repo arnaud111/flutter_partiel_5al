@@ -15,8 +15,8 @@ class LoginAlert extends StatefulWidget {
 }
 
 class _LoginAlertState extends State<LoginAlert> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -38,78 +38,83 @@ class _LoginAlertState extends State<LoginAlert> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: SingleChildScrollView(
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state.status.status == StateStatusEnum.success) {
-              Navigator.pop(context);
-            }
-            if (state.status.status == StateStatusEnum.loading) {
-              return const Loading();
-            }
-            return Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormFieldSexy(
-                    label: 'Email',
-                    controller: emailController,
-                    error: state.status.payload?["param"] == "email",
-                  ),
-                  TextFormFieldSexy(
-                    label: 'Password',
-                    controller: passwordController,
-                    error: state.status.payload?["param"] == "password",
-                    obscureText: true,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8.0,
+      content: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state.status.status == StateStatusEnum.success) {
+            Navigator.pop(context);
+          }
+        },
+        child: SingleChildScrollView(
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state.status.status == StateStatusEnum.loading) {
+                return const Loading();
+              }
+              return Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormFieldSexy(
+                      label: 'Email',
+                      controller: emailController,
+                      error: state.status.payload?["param"] == "email",
                     ),
-                    child: Text(
-                      state.status.message ?? "",
-                      style: const TextStyle(
-                        color: Colors.red,
+                    TextFormFieldSexy(
+                      label: 'Password',
+                      controller: passwordController,
+                      error: state.status.payload?["param"] == "password",
+                      obscureText: true,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                    ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF626af7),
+                      child: Text(
+                        state.status.message ?? "",
+                        style: const TextStyle(
+                          color: Colors.red,
                         ),
-                        child: const Text("Login"),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => const SignupAlert(),
-                      );
-                    },
-                    child: const Text(
-                      "Signup",
-                      style: TextStyle(
-                        color: Colors.white54,
-                        decoration: TextDecoration.underline,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF626af7),
+                          ),
+                          child: const Text("Login"),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog<String>(
+                          context: context,
+                          builder: (
+                              BuildContext context) => const SignupAlert(),
+                        );
+                      },
+                      child: const Text(
+                        "Signup",
+                        style: TextStyle(
+                          color: Colors.white54,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

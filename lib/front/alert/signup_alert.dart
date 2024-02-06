@@ -15,13 +15,12 @@ class SignupAlert extends StatefulWidget {
 }
 
 class _SignupAlertState extends State<SignupAlert> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController =
-      TextEditingController();
+  final TextEditingController passwordConfirmController = TextEditingController();
 
   @override
   void initState() {
@@ -54,94 +53,98 @@ class _SignupAlertState extends State<SignupAlert> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(content: SingleChildScrollView(
-      child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
           if (state.status.status == StateStatusEnum.success) {
             Navigator.pop(context);
           }
-          if (state.status.status == StateStatusEnum.loading) {
-            return const Loading();
-          }
-          return Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormFieldSexy(
-                  label: 'Email',
-                  controller: emailController,
-                  error: state.status.payload?["param"] == "email",
-                ),
-                TextFormFieldSexy(
-                  label: 'Name',
-                  controller: nameController,
-                  error: state.status.payload?["param"] == "name",
-                ),
-                TextFormFieldSexy(
-                  label: 'Password',
-                  controller: passwordController,
-                  error: state.status.payload?["param"] == "password",
-                  obscureText: true,
-                ),
-                TextFormField(
-                  controller: passwordConfirmController,
-                  validator: passwordConfirmValidator,
-                  decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    labelText: 'Confirm Password',
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  obscureText: true,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8.0,
-                  ),
-                  child: Text(
-                    state.status.message ?? "",
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: signup,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF626af7),
-                      ),
-                      child: const Text("Signup"),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => const LoginAlert(),
-                    );
-                  },
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Colors.white54,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
         },
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state.status.status == StateStatusEnum.loading) {
+              return const Loading();
+            }
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormFieldSexy(
+                    label: 'Email',
+                    controller: emailController,
+                    error: state.status.payload?["param"] == "email",
+                  ),
+                  TextFormFieldSexy(
+                    label: 'Name',
+                    controller: nameController,
+                    error: state.status.payload?["param"] == "name",
+                  ),
+                  TextFormFieldSexy(
+                    label: 'Password',
+                    controller: passwordController,
+                    error: state.status.payload?["param"] == "password",
+                    obscureText: true,
+                  ),
+                  TextFormField(
+                    controller: passwordConfirmController,
+                    validator: passwordConfirmValidator,
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      labelText: 'Confirm Password',
+                      labelStyle: TextStyle(color: Colors.white),
+                    ),
+                    obscureText: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                    ),
+                    child: Text(
+                      state.status.message ?? "",
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: signup,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF626af7),
+                        ),
+                        child: const Text("Signup"),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => const LoginAlert(),
+                      );
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Colors.white54,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     ));
   }

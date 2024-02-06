@@ -11,7 +11,8 @@ import '../widget/stack_loading.dart';
 class EditPostScreen extends StatefulWidget {
   static const String routeName = "/editPost";
 
-  static void navigateTo(BuildContext context, EditPostRouteArguments arguments) {
+  static void navigateTo(BuildContext context,
+      EditPostRouteArguments arguments) {
     Navigator.of(context).pushNamed(routeName, arguments: arguments);
   }
 
@@ -61,53 +62,54 @@ class _EditPostScreenState extends State<EditPostScreen> {
       appBar: AppBar(
         title: const Text("Edit"),
       ),
-      body: BlocBuilder<PostManagementBloc, PostManagementState>(
-        builder: (context, state) {
+      body: BlocListener<PostManagementBloc, PostManagementState>(
+        listener: (context, state) {
           if (state.status == PostStatusEnum.updated) {
-            Future.delayed(Duration.zero, () {
-              Navigator.of(context).pop();
-            });
-            return Container();
+            Navigator.of(context).pop();
           }
-          return StackLoading(
-            loadingCondition: () {
-              return state.status == PostStatusEnum.loading;
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 16,
-                right: 16,
-              ),
-              child: Wrap(
-                runSpacing: 16,
-                children: [
-                  TextField(
-                    controller: textController,
-                    maxLines: 8,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your message",
-                      fillColor: Colors.black12,
-                      filled: true,
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      state.message ?? "",
-                      style: const TextStyle(
-                        color: Colors.red,
+        },
+        child: BlocBuilder<PostManagementBloc, PostManagementState>(
+          builder: (context, state) {
+            return StackLoading(
+              loadingCondition: () {
+                return state.status == PostStatusEnum.loading;
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                ),
+                child: Wrap(
+                  runSpacing: 16,
+                  children: [
+                    TextField(
+                      controller: textController,
+                      maxLines: 8,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your message",
+                        fillColor: Colors.black12,
+                        filled: true,
+                        border: InputBorder.none,
                       ),
                     ),
-                  ),
-                  ImagePickerField(
-                    imagePickerController: imagePickerController,
-                  ),
-                ],
+                    Center(
+                      child: Text(
+                        state.message ?? "",
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    ImagePickerField(
+                      imagePickerController: imagePickerController,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => sendForm(context),

@@ -119,149 +119,150 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostManagementBloc, PostManagementState>(
-      builder: (context, postManagementState) {
-        if (postManagementState.status == PostStatusEnum.deleted) {
-          Future.delayed(Duration.zero, () {
-            Navigator.of(context).pop();
-          });
-        } else if (postManagementState.status == PostStatusEnum.updated) {
-          getPost();
-          initPostManagement();
+    return BlocListener<PostManagementBloc, PostManagementState>(
+      listener: (context, state) {
+        if (state.status == PostStatusEnum.deleted) {
+          Navigator.of(context).pop();
         }
-        return BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, authState) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text("Post Detail"),
-              ),
-              body: StackLoading(
-                loadingCondition: () {
-                  return postManagementState.status == PostStatusEnum.loading;
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: BlocBuilder<PostDetailBloc, PostDetailState>(
-                      builder: (context, postState) {
-                    switch (postState.status.status) {
-                      case StateStatusEnum.initial:
-                        return Container();
-                      case StateStatusEnum.loading:
-                        return const Loading();
-                      case StateStatusEnum.success:
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RowInfoAuthor(
-                              createdAt: postState.post!.createdAt!,
-                              author: postState.post!.author!,
-                            ),
-                            Text(
-                              postState.post!.content!,
-                            ),
-                            if (postState.post!.image != null)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: Center(
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      maxHeight: 300,
-                                    ),
-                                    child: Image.network(
-                                        postState.post!.image!.url!),
-                                  ),
-                                ),
+      },
+      child: BlocBuilder<PostManagementBloc, PostManagementState>(
+        builder: (context, postManagementState) {
+          return BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, authState) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: const Text("Post Detail"),
+                ),
+                body: StackLoading(
+                  loadingCondition: () {
+                    return postManagementState.status == PostStatusEnum.loading;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: BlocBuilder<PostDetailBloc, PostDetailState>(
+                        builder: (context, postState) {
+                      switch (postState.status.status) {
+                        case StateStatusEnum.initial:
+                          return Container();
+                        case StateStatusEnum.loading:
+                          return const Loading();
+                        case StateStatusEnum.success:
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RowInfoAuthor(
+                                createdAt: postState.post!.createdAt!,
+                                author: postState.post!.author!,
                               ),
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, authState) {
-                                if (authState.status.status ==
-                                        StateStatusEnum.success &&
-                                    authState.auth!.id ==
-                                        postState.post!.author!.id) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => edit(postState.post!),
-                                        child: const Icon(
-                                          Icons.edit,
-                                          color: Colors.blueAccent,
-                                        ),
+                              Text(
+                                postState.post!.content!,
+                              ),
+                              if (postState.post!.image != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(
+                                    child: ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 300,
                                       ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      GestureDetector(
-                                        onTap: delete,
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                                return Container();
-                              },
-                            ),
-                            const Divider(
-                              indent: 16,
-                              endIndent: 16,
-                              color: Colors.white70,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (authState.status.status ==
-                                        StateStatusEnum.success) {
-                                      addComment(widget.postId);
-                                    } else {
-                                      displayLogin();
-                                    }
-                                  },
-                                  child: const Icon(
-                                    Icons.add,
+                                      child: Image.network(
+                                          postState.post!.image!.url!),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: postState.post!.comments!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    child: CommentItem(
-                                        comment:
-                                            postState.post!.comments![index]),
-                                  );
+                              BlocBuilder<AuthBloc, AuthState>(
+                                builder: (context, authState) {
+                                  if (authState.status.status ==
+                                          StateStatusEnum.success &&
+                                      authState.auth!.id ==
+                                          postState.post!.author!.id) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => edit(postState.post!),
+                                          child: const Icon(
+                                            Icons.edit,
+                                            color: Colors.blueAccent,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        GestureDetector(
+                                          onTap: delete,
+                                          child: const Icon(
+                                            Icons.delete,
+                                            color: Colors.redAccent,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Container();
                                 },
                               ),
-                            ),
-                          ],
-                        );
-                      case StateStatusEnum.error:
-                        return ErrorRefresh(
-                          onRefresh: () async {
-                            getPost();
-                          },
-                          errorMessage: postState.status.message!,
-                        );
-                    }
-                  }),
+                              const Divider(
+                                indent: 16,
+                                endIndent: 16,
+                                color: Colors.white70,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (authState.status.status ==
+                                          StateStatusEnum.success) {
+                                        addComment(widget.postId);
+                                      } else {
+                                        displayLogin();
+                                      }
+                                    },
+                                    child: const Icon(
+                                      Icons.add,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: postState.post!.comments!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
+                                      child: CommentItem(
+                                        comment: postState.post!.comments![index],
+                                        reloadComment: getPost,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        case StateStatusEnum.error:
+                          return ErrorRefresh(
+                            onRefresh: () async {
+                              getPost();
+                            },
+                            errorMessage: postState.status.message!,
+                          );
+                      }
+                    }),
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

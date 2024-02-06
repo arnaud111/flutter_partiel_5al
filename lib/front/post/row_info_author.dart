@@ -15,6 +15,15 @@ class RowInfoAuthor extends StatelessWidget {
   final User author;
   final bool clickableProfile;
 
+  void onClickProfile(BuildContext context) {
+    ProfileScreen.navigateTo(context, author);
+  }
+
+  String getDate() {
+    DateTime dataTime = DateTime.fromMillisecondsSinceEpoch(createdAt);
+    return "${dataTime.year}/${dataTime.month}/${dataTime.day} ${dataTime.hour}:${dataTime.minute}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,14 +48,5 @@ class RowInfoAuthor extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void onClickProfile(BuildContext context) {
-    ProfileScreen.navigateTo(context, author);
-  }
-
-  String getDate() {
-    DateTime dataTime = DateTime.fromMillisecondsSinceEpoch(createdAt);
-    return "${dataTime.year}/${dataTime.month}/${dataTime.day} ${dataTime.hour}:${dataTime.minute}";
   }
 }

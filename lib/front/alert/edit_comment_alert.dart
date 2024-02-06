@@ -10,9 +10,11 @@ class EditCommentAlert extends StatefulWidget {
   const EditCommentAlert({
     super.key,
     required this.comment,
+    required this.reloadComment,
   });
 
   final Comment comment;
+  final Function reloadComment;
 
   @override
   State<EditCommentAlert> createState() => _EditCommentAlertState();
@@ -30,73 +32,85 @@ class _EditCommentAlertState extends State<EditCommentAlert> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widget.reloadComment();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommentManagementBloc(
-        commentRepository: context.read<CommentRepository>(),
-      ),
+      create: (context) =>
+          CommentManagementBloc(
+            commentRepository: context.read<CommentRepository>(),
+          ),
       child: AlertDialog(
-        content: SingleChildScrollView(
-          child: BlocBuilder<CommentManagementBloc, CommentManagementState>(
-            builder: (context, state) {
-              if (state.status == CommentStatusEnum.updated) {
-                Navigator.pop(context, true);
-              }
-              if (state.status == CommentStatusEnum.loading) {
-                return const Loading();
-              }
-              return Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: contentController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        hintText: "Enter your message",
-                        fillColor: Colors.black12,
-                        filled: true,
-                        border: InputBorder.none,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                      ),
-                      child: Text(
-                        state.message ?? "",
-                        style: const TextStyle(
-                          color: Colors.red,
+        content: BlocListener<CommentManagementBloc, CommentManagementState>(
+          listener: (context, state) {
+            if (state.status == CommentStatusEnum.updated) {
+              Navigator.pop(context, true);
+            }
+          },
+          child: SingleChildScrollView(
+            child: BlocBuilder<CommentManagementBloc, CommentManagementState>(
+              builder: (context, state) {
+                if (state.status == CommentStatusEnum.loading) {
+                  return const Loading();
+                }
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: contentController,
+                        maxLines: 4,
+                        decoration: const InputDecoration(
+                          hintText: "Enter your message",
+                          fillColor: Colors.black12,
+                          filled: true,
+                          border: InputBorder.none,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            final postManagementBloc = BlocProvider.of<CommentManagementBloc>(context);
-                            postManagementBloc.add(UpdateComment(
-                              content: contentController.text,
-                              commentId: widget.comment.id!,
-                            ));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF626af7),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                        ),
+                        child: Text(
+                          state.message ?? "",
+                          style: const TextStyle(
+                            color: Colors.red,
                           ),
-                          child: const Text("Update"),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final postManagementBloc = BlocProvider.of<
+                                  CommentManagementBloc>(context);
+                              postManagementBloc.add(UpdateComment(
+                                content: contentController.text,
+                                commentId: widget.comment.id!,
+                              ));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF626af7),
+                            ),
+                            child: const Text("Update"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

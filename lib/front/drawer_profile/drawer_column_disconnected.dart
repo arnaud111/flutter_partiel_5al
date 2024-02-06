@@ -5,6 +5,20 @@ import 'package:flutter_partiel_5al/front/alert/signup_alert.dart';
 class DrawerColumnDisconnected extends StatelessWidget {
   const DrawerColumnDisconnected({super.key});
 
+  void showLoginAlert(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const LoginAlert(),
+    );
+  }
+
+  void showSignupAlert(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const SignupAlert(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -54,20 +68,6 @@ class DrawerColumnDisconnected extends StatelessWidget {
           child: Container(),
         ),
       ],
-    );
-  }
-
-  void showLoginAlert(BuildContext context) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => const LoginAlert(),
-    );
-  }
-
-  void showSignupAlert(BuildContext context) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => const SignupAlert(),
     );
   }
 }
