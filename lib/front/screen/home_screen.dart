@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     authBloc.add(GetListPost());
   }
 
-  void onClickFloatingButton(AuthState state) {
+  void onClickFloatingButton(AuthState state, BuildContext context) {
     if (state.status.status != StateStatusEnum.success) {
       Scaffold.of(context).openDrawer();
     } else {
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           return FloatingActionButton(
-            onPressed: () => onClickFloatingButton(state),
+            onPressed: () => onClickFloatingButton(state, context),
             backgroundColor: const Color(0xFF626af7),
             child: const Icon(
               Icons.add,

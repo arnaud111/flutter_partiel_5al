@@ -130,6 +130,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           return BlocBuilder<AuthBloc, AuthState>(
             builder: (context, authState) {
               return Scaffold(
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   title: const Text("Post Detail"),
                 ),
@@ -167,7 +168,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         maxHeight: 300,
                                       ),
                                       child: Image.network(
-                                          postState.post!.image!.url!),
+                                        postState.post!.image!.url!,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -238,7 +240,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         vertical: 8,
                                       ),
                                       child: CommentItem(
-                                        comment: postState.post!.comments![index],
+                                        comment:
+                                            postState.post!.comments![index],
                                         reloadComment: getPost,
                                       ),
                                     );
