@@ -75,6 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     case StateStatusEnum.loading:
                       return const Loading();
                     case StateStatusEnum.success:
+                    case StateStatusEnum.loadingNewItems:
                       return ListView.builder(
                         itemCount: state.postList!.itemsTotal,
                         itemBuilder: (BuildContext context, int index) {

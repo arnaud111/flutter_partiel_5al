@@ -1,6 +1,7 @@
 enum StateStatusEnum {
   initial,
   loading,
+  loadingNewItems,
   success,
   error,
 }

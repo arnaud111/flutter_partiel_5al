@@ -50,7 +50,8 @@ class PostApi extends PostDataSource {
 
   @override
   Future<PostList> get(int? page, int? perPage) async {
-    final response = await Api.dio.get("/post", data: {
+
+    final response = await Api.dio.get("/post", queryParameters: {
       "page": page,
       "per_page": perPage,
     });

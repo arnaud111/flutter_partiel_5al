@@ -15,4 +15,10 @@ class PostListState {
       postList: postList,
     );
   }
+
+  void addInList(PostList newList) {
+    if (postList != null) {
+      postList!.addInPostList(newList);
+    }
+  }
 }

@@ -148,6 +148,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         case StateStatusEnum.loading:
                           return const Loading();
                         case StateStatusEnum.success:
+                        case StateStatusEnum.loadingNewItems:
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

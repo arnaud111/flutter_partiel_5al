@@ -33,4 +33,21 @@ class PostList {
       items: json['items'] == null ? null : (json['items'] as List<dynamic>).map((comment) => Post.fromJson(comment)).toList(),
     );
   }
+
+  void addInPostList(PostList newList) {
+    if (itemsReceived != null && newList.itemsReceived != null) {
+      int newItemReceived = itemsReceived!;
+      newItemReceived += newList.itemsReceived!;
+      itemsReceived = newItemReceived;
+    }
+    curPage = newList.curPage ?? curPage;
+    nextPage = newList.nextPage ?? nextPage;
+    prevPage = newList.prevPage ?? prevPage;
+    offSet = newList.offSet ?? offSet;
+    itemsTotal = newList.itemsTotal ?? itemsTotal;
+    pageTotal = newList.pageTotal ?? pageTotal;
+    for (int i = 0; i < newList.items!.length; i++) {
+      items!.add(newList.items![i]);
+    }
+  }
 }
