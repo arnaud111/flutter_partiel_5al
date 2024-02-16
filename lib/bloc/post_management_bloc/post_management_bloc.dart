@@ -68,6 +68,7 @@ class PostManagementBloc extends Bloc<PostManagementEvent, PostManagementState> 
         message: e.message,
       ));
     } catch (e) {
+      print(e.toString());
       emit(PostManagementState(
         status: PostStatusEnum.error,
         message: "Error, please retry later !",
