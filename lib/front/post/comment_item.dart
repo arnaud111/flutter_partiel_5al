@@ -82,7 +82,7 @@ class CommentItem extends StatelessWidget {
                       createdAt: comment.createdAt!,
                       author: comment.author!,
                     ),
-                    Text(comment.content!),
+                    Text(comment.content ?? ""),
                     if (authState.status.status == StateStatusEnum.success &&
                         authState.auth!.id == comment.author!.id)
                       Row(

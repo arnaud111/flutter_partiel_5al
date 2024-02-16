@@ -32,7 +32,8 @@ class _ListPostState extends State<ListPost> {
 
     if (_scrollController.position.extentAfter < 500 &&
         postListBloc.state.status.status != StateStatusEnum.loading &&
-        postListBloc.state.status.status != StateStatusEnum.loadingNewItems) {
+        postListBloc.state.status.status != StateStatusEnum.loadingNewItems &&
+        postListBloc.state.postList?.nextPage != postListBloc.state.postList?.curPage) {
       postListBloc.add(AddListPost());
     }
   }
